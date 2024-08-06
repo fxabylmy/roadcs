@@ -13,14 +13,24 @@ import com.jingjin.model.user.pojo.User;
 import com.jingjin.serviceClient.service.order.OrderFeignClient;
 import com.jingjin.userservice.mapper.UserMapper;
 import com.jingjin.userservice.service.UserService;
+import com.jingjin.userservice.util.UploadUtil;
 import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Base64;
 import java.util.Map;
 
 import static com.jingjin.common.constant.RabbitMQConstant.DEMO_MESSAGE_EXCHANGE;
@@ -44,6 +54,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
      */
     @Resource
     private JwtTokenUtil jwtTokenUtil;
+
+    @Resource
+    private UploadUtil uploadUtil;
 
     /**
      * 兔子模板
@@ -97,6 +110,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         }
         return true;
     }
+
+    @Override
+    public Boolean uploadAvatar(MultipartFile avatar,String userId) throws IOException {
+        String avatarUrl = uploadUtil.uploadImg(avatar);
+        User user = User.builder().id(userId).avatarUrl(avatarUrl).build();
+        Boolean isSuccess = updateById(user);
+        return isSuccess;
+    }
+
+    @Override
+    public byte[] getAvatar(String userId) throws IOException {
+        String avatarUrl = getById(userId).getAvatarUrl();
+        throwIf(StringUtils.isEmpty(avatarUrl),SYSTEM_ERROR);
+        URL url = new URL(avatarUrl);
+        InputStream is = url.openStream();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = is.read(buffer)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+        is.close();
+        byte[] imageBytes = os.toByteArray();
+
+
+        return imageBytes;
+    }
+
 
     /**
      * 用户登录

@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 用户注册dto
+ * 用户注册请求体
  *
  * @author fxab
  * @date 2024/08/05

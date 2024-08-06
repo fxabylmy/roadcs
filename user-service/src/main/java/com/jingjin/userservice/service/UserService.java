@@ -3,7 +3,12 @@ package com.jingjin.userservice.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.pojo.User;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Map;
 
 
@@ -16,4 +21,9 @@ public interface UserService extends IService<User> {
     Boolean logout(String userId);
 
     Boolean userRegister(UserRegisterDTO userRegisterDTO);
+
+
+    Boolean uploadAvatar(MultipartFile avatar, String userId) throws IOException;
+
+    byte[] getAvatar(String userId) throws IOException;
 }
