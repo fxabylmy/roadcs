@@ -2,13 +2,10 @@ package com.jingjin.userservice.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
-import com.jingjin.model.user.pojo.User;
-import org.springframework.core.io.ByteArrayResource;
+import com.jingjin.model.user.po.User;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Map;
 
 

@@ -1,6 +1,6 @@
 package com.jingjin.userservice.controller.inner;
 
-import com.jingjin.model.user.pojo.User;
+import com.jingjin.model.user.po.User;
 import com.jingjin.serviceClient.service.user.UserFeignClient;
 import com.jingjin.userservice.service.UserService;
 import jakarta.annotation.Resource;

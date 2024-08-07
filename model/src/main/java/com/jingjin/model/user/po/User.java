@@ -1,4 +1,4 @@
-package com.jingjin.model.user.pojo;
+package com.jingjin.model.user.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;

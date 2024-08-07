@@ -1,14 +1,12 @@
 package com.jingjin.orderservice.controller.inner;
 
-import com.jingjin.model.order.pojo.Order;
+import com.jingjin.model.order.po.Order;
 import com.jingjin.orderservice.service.OrderService;
 import com.jingjin.serviceClient.service.order.OrderFeignClient;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 /**
  * 测试分布式事务

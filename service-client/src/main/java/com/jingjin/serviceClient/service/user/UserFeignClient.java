@@ -1,6 +1,6 @@
 package com.jingjin.serviceClient.service.user;
 
-import com.jingjin.model.user.pojo.User;
+import com.jingjin.model.user.po.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

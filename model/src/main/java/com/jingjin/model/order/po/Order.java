@@ -1,4 +1,4 @@
-package com.jingjin.model.order.pojo;
+package com.jingjin.model.order.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;

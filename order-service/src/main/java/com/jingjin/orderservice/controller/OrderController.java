@@ -2,7 +2,7 @@ package com.jingjin.orderservice.controller;
 
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ResultUtil;
-import com.jingjin.model.user.pojo.User;
+import com.jingjin.model.user.po.User;
 import com.jingjin.serviceClient.service.user.UserFeignClient;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;

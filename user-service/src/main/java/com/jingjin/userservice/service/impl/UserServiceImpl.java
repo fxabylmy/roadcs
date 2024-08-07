@@ -1,6 +1,5 @@
 package com.jingjin.userservice.service.impl;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,32 +8,25 @@ import com.jingjin.common.result.ErrorCode;
 
 import com.jingjin.jwtutil.jwtUtil.JwtTokenUtil;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
-import com.jingjin.model.user.pojo.User;
+import com.jingjin.model.user.po.User;
 import com.jingjin.serviceClient.service.order.OrderFeignClient;
 import com.jingjin.userservice.mapper.UserMapper;
 import com.jingjin.userservice.service.UserService;
 import com.jingjin.userservice.util.UploadUtil;
-import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Base64;
 import java.util.Map;
 
-import static com.jingjin.common.constant.RabbitMQConstant.DEMO_MESSAGE_EXCHANGE;
-import static com.jingjin.common.constant.RabbitMQConstant.DEMO_MESSAGE_SEND_KEY;
 import static com.jingjin.common.exception.ThrowUtils.throwIf;
 import static com.jingjin.common.result.ErrorCode.LOGOUT_ERROR;
 import static com.jingjin.common.result.ErrorCode.SYSTEM_ERROR;
