@@ -13,6 +13,8 @@
         <module>jwt-util</module>
         <module>model</module>
         <module>order-service</module>
+        <module>admin-website-service</module>
+        <module>user-website-service</module>
     </modules>
     <name>roadcs</name>
     <description>roadcs</description>

@@ -1,19 +1,22 @@
-package com.jingjin.model.adminWebsite.vo;
+package com.jingjin.model.userWebsite.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@Data
+/**
+ * 站内网站vo
+ *
+ * @author fxab
+ * @date 2024/08/08
+ */
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class AdminWebsiteDetailVO implements Serializable {
+@Data
+public class UserWebsiteVO implements Serializable {
+
     /**
      * id
      */
@@ -34,30 +37,11 @@ public class AdminWebsiteDetailVO implements Serializable {
      */
     private String websiteUrl;
 
-    /**
-     * 类型
-     */
-    private Integer type;
-
-    /**
-     * 知识类别
-     */
-    private Integer category;
-
-    /**
-     * 重要性级别
-     */
-    private Integer importanceLevel;
 
     /**
      * 副标题
      */
     private String subtitle;
-
-    /**
-     * 推荐理由
-     */
-    private String recommendation;
 
 
     /**

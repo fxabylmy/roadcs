@@ -76,13 +76,13 @@ public class AdminWebsiteController {
      * @return {@link ResponseEntity}<{@link ByteArrayResource}>
      * @throws IOException ioexception
      */
-    @Operation(summary = "获取网站图标")
-    @GetMapping("/logo/get")
+/*    @Operation(summary = "获取网站图标")
+    @GetMapping("/logo/get/{id}")
     @Transactional
-    public ResponseEntity<ByteArrayResource> getAdminWebsiteLogo() throws IOException {
+    public ResponseEntity<ByteArrayResource> getAdminWebsiteLogo(@PathVariable("id") Integer adminWebsiteId) throws IOException {
         //todo 获取网站图标
         return null;
-    }
+    }*/
 
     /**
      * 添加站内网站

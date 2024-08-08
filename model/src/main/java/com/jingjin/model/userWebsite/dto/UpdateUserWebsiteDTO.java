@@ -1,23 +1,26 @@
-package com.jingjin.model.adminWebsite.vo;
+package com.jingjin.model.userWebsite.dto;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminWebsiteDetailVO implements Serializable {
+public class UpdateUserWebsiteDTO implements Serializable {
+
     /**
      * id
      */
     private Integer id;
+
 
     /**
      * 网站名
@@ -25,29 +28,15 @@ public class AdminWebsiteDetailVO implements Serializable {
     private String name;
 
     /**
-     * logoBase64字符串
+     * 图标
      */
-    private String logoBase64;
+    private MultipartFile logo;
 
     /**
      * 网站url
      */
     private String websiteUrl;
 
-    /**
-     * 类型
-     */
-    private Integer type;
-
-    /**
-     * 知识类别
-     */
-    private Integer category;
-
-    /**
-     * 重要性级别
-     */
-    private Integer importanceLevel;
 
     /**
      * 副标题
@@ -55,13 +44,8 @@ public class AdminWebsiteDetailVO implements Serializable {
     private String subtitle;
 
     /**
-     * 推荐理由
-     */
-    private String recommendation;
-
-
-    /**
      * 串行版本uid
      */
     private static final long serialVersionUID = 1L;
+
 }
