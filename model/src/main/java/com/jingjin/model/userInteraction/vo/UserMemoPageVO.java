@@ -1,6 +1,5 @@
-package com.jingjin.model.userWebsite.vo;
+package com.jingjin.model.userInteraction.vo;
 
-import com.jingjin.model.adminWebsite.vo.AdminWebsiteSimpleVO;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class UserWebsitePageVO implements Serializable {
+public class UserMemoPageVO implements Serializable {
     /**
      * 页面索引
      */
@@ -25,7 +24,8 @@ public class UserWebsitePageVO implements Serializable {
      */
     private Long total;
 
-    private List<UserWebsiteVO> userWebsiteVOList;
+    private List<UserMemoVO> userMemoVOList;
+
 
     public static final long serialVersionUID = 1L;
 }

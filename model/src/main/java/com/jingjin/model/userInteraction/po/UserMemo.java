@@ -1,4 +1,4 @@
-package com.jingjin.model.userWebsite.po;
+package com.jingjin.model.userInteraction.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户网站
+ * 用户备忘录
  *
  * @author fxab
  * @date 2024/08/08
@@ -19,7 +19,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserWebsite implements Serializable {
+public class UserMemo implements Serializable {
+
     /**
      * id
      */
@@ -32,27 +33,14 @@ public class UserWebsite implements Serializable {
     private String userId;
 
     /**
-     * 网站名
+     * 标题
      */
-    private String name;
+    private String title;
 
     /**
-     * 徽标url
+     * 内容
      */
-    private String logoUrl;
-
-    /**
-     * 网站url
-     */
-    private String websiteUrl;
-
-
-    /**
-     * 副标题
-     */
-    private String subtitle;
-
-
+    private String content;
     /**
      * 创建时间
      */

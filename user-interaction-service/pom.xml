@@ -11,10 +11,10 @@
     </parent>
 
     <!-- 坐标 -->
-    <artifactId>user-website-service</artifactId>
+    <artifactId>user-interaction-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user-website-service</name>
-    <description>站外网站服务</description>
+    <name>user-interaction-service</name>
+    <description>用户互动服务</description>
 
     <!-- 配置 -->
     <properties>

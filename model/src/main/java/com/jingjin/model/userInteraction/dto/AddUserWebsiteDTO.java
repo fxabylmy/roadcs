@@ -1,7 +1,5 @@
-package com.jingjin.model.userWebsite.dto;
+package com.jingjin.model.userInteraction.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,21 +12,14 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserWebsiteDTO implements Serializable {
-
-    /**
-     * id
-     */
-    private Integer id;
-
-
+public class AddUserWebsiteDTO implements Serializable {
     /**
      * 网站名
      */
     private String name;
 
     /**
-     * 图标
+     * 徽标
      */
     private MultipartFile logo;
 
@@ -43,9 +34,9 @@ public class UpdateUserWebsiteDTO implements Serializable {
      */
     private String subtitle;
 
+
     /**
      * 串行版本uid
      */
     private static final long serialVersionUID = 1L;
-
 }

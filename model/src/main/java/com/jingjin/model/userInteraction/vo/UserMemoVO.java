@@ -1,4 +1,4 @@
-package com.jingjin.model.userWebsite.vo;
+package com.jingjin.model.userInteraction.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Builder;
@@ -7,15 +7,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 站内网站vo
- *
- * @author fxab
- * @date 2024/08/08
- */
 @Builder
 @Data
-public class UserWebsiteVO implements Serializable {
+public class UserMemoVO implements Serializable {
 
     /**
      * id
@@ -23,25 +17,24 @@ public class UserWebsiteVO implements Serializable {
     private Integer id;
 
     /**
-     * 网站名
+     * 标题
      */
-    private String name;
+    private String title;
 
     /**
-     * logoBase64字符串
+     * 内容
      */
-    private String logoBase64;
+    private String content;
 
     /**
-     * 网站url
+     * 创建时间
      */
-    private String websiteUrl;
-
+    private Date createTime;
 
     /**
-     * 副标题
+     * 更新时间
      */
-    private String subtitle;
+    private Date updateTime;
 
 
     /**

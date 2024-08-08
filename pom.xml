@@ -14,7 +14,7 @@
         <module>model</module>
         <module>order-service</module>
         <module>admin-website-service</module>
-        <module>user-website-service</module>
+        <module>user-interaction-service</module>
     </modules>
     <name>roadcs</name>
     <description>roadcs</description>

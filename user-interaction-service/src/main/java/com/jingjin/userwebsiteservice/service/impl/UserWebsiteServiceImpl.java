@@ -1,8 +1,7 @@
 package com.jingjin.userwebsiteservice.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jingjin.model.adminWebsite.po.AdminWebsite;
-import com.jingjin.model.userWebsite.po.UserWebsite;
+import com.jingjin.model.userInteraction.po.UserWebsite;
 import com.jingjin.userwebsiteservice.mapper.UserWebsiteMapper;
 import com.jingjin.userwebsiteservice.service.UserWebsiteService;
 import jakarta.annotation.Resource;
