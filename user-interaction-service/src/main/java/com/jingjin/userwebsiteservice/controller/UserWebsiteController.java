@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 /**
- * 站外网站控制器
+ * 用户自定义网站控制器
  *
  * @author fxab
  * @date 2024/08/07
@@ -27,32 +27,32 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/website")
 @Slf4j
-@Tag(name = "站外网站接口文档", description = "站外网站模块接口文档")
+@Tag(name = "用户自定义网站接口文档", description = "用户自定义网站模块接口文档")
 public class UserWebsiteController {
 
     /**
-     * 站外网站服务
+     * 用户自定义网站服务
      */
     @Resource
     private UserWebsiteService userWebsiteService;
 
     /**
-     * 根据token获取站外网站列表
+     * 根据token获取用户自定义网站列表
      *
      * @return {@link BaseResult}<{@link UserWebsitePageVO}>
      */
-    @Operation(summary = "获取站外网站列表")
+    @Operation(summary = "获取用户自定义网站列表")
     @GetMapping("/get/list")
     @Transactional
     public BaseResult<UserWebsitePageVO> getAdminWebsiteDetail(){
         //todo 从token获取当前用户id
-        //todo 获取站外网站列表
+        //todo 获取用户自定义网站列表
         return null;
     }
 
 
     /**
-     * 获取站外网站logo
+     * 获取用户自定义网站logo
      *
      * @param userWebsiteId 用户网站id
      * @return {@link ResponseEntity}<{@link ByteArrayResource}>
@@ -67,41 +67,41 @@ public class UserWebsiteController {
     }*/
 
     /**
-     * 添加站外网站
+     * 添加用户自定义网站
      *
      * @param addUserWebsiteDTO 添加用户网站dto
      * @return {@link BaseResult}<{@link String}>
      */
-    @Operation(summary = "上传新站外网站")
+    @Operation(summary = "上传新用户自定义网站")
     @PostMapping("/add")
     public BaseResult<String> addUserWebsite(AddUserWebsiteDTO addUserWebsiteDTO){
-        //todo 添加新站外网站
+        //todo 添加新用户自定义网站
         return null;
     }
 
     /**
-     * 删除站外网站
+     * 删除用户自定义网站
      *
      * @param userWebsiteId 用户网站id
      * @return {@link BaseResult}<{@link String}>
      */
-    @Operation(summary = "删除站外网站")
+    @Operation(summary = "删除用户自定义网站")
     @DeleteMapping ("/delete/{id}")
     public BaseResult<String> deleteUserWebsite(@PathVariable("id") Integer userWebsiteId){
-        //todo 删除站外网站
+        //todo 删除用户自定义网站
         return null;
     }
 
     /**
-     * 更新站外网站
+     * 更新用户自定义网站
      *
      * @param updateUserWebsiteDTO 更新用户网站dto
      * @return {@link BaseResult}<{@link String}>
      */
-    @Operation(summary = "修改站外网站")
+    @Operation(summary = "修改用户自定义网站")
     @PostMapping("/update")
     public BaseResult<String> updateAdminWebsite(UpdateUserWebsiteDTO updateUserWebsiteDTO){
-        //todo 修改站外网站
+        //todo 修改用户自定义网站
         return null;
     }
 

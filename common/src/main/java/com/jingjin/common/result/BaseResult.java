@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class BaseResult<T> implements Serializable {
 
     /**
-     * 代码
+     * 编码
      */
     private int code;
 
