@@ -16,7 +16,9 @@ public enum ErrorCode {
     DATABASE_ERROR(50020, "数据库操作失败"),
     LOGOUT_ERROR(50030,"登出失败"),
     TOKEN_MISSION(40010,"Token丢失"),
-    TOKEN_INVALID(40020,"Token无效");
+    TOKEN_INVALID(40020,"Token无效"),
+    VALIDATE_FAILED(50040,"参数检验失败");
+
     ;
 
     /**
