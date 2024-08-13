@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
@@ -21,6 +22,11 @@ public class UpdateThirdPartyWebsiteDTO implements Serializable {
      * 网站名
      */
     private String name;
+
+    /**
+     * 徽标
+     */
+    private MultipartFile logo;
 
     /**
      * 网站url

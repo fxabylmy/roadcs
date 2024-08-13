@@ -9,7 +9,7 @@ public class AddFavoritesDTO implements Serializable {
     /**
      * 站内网站id
      */
-    private Integer adminWebsiteId;
+    private Integer thirdPartyWebsiteId;
 
     /**
      * 串行版本uid

@@ -1,4 +1,4 @@
-package com.jingjin.userservice.util;
+package com.jingjin.thirdpartywebsiteservice.util;
 
 import cn.hutool.core.util.IdUtil;
 import com.aliyun.oss.OSS;
@@ -61,7 +61,7 @@ public class UploadUtil {
      * @return {@link String}
      * @throws Exception 例外
      */
-    public String uploadImg(MultipartFile file) {
+    public String uploadImg(MultipartFile file){
         //判断文件是否为空
         if (file == null || file.isEmpty()){
             throw new BusinessException(ErrorCode.SYSTEM_ERROR,"文件为空");

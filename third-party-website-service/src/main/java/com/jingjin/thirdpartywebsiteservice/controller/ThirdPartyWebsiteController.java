@@ -1,5 +1,9 @@
 package com.jingjin.thirdpartywebsiteservice.controller;
 
+import com.jingjin.common.result.ErrorCode;
+import com.jingjin.common.result.ResultUtil;
+import com.jingjin.model.thirdPartyWebsite.po.ThirdPartyWebsite;
+import com.jingjin.model.thirdPartyWebsite.vo.ThirdPartyWebsiteSimpleVO;
 import com.jingjin.thirdpartywebsiteservice.service.ThirdPartyWebsiteService;
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.model.thirdPartyWebsite.dto.AddThirdPartyWebsiteDTO;
@@ -19,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 第三方网站控制器
@@ -47,23 +52,23 @@ public class ThirdPartyWebsiteController {
     @Operation(summary = "获取第三方网站列表")
     @GetMapping("/get/list")
     @Transactional
-    public BaseResult<ThirdPartyWebsitePageVO> getAdminWebsiteDetail(){
-        //todo 获取第三方网站列表
-        return null;
+    public BaseResult<List<ThirdPartyWebsiteSimpleVO>> getThirdPartyWebsiteDetail(){
+        List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = thirdPartyWebsiteService.getAll();
+        return ResultUtil.success(websiteSimpleVOList);
     }
 
     /**
      * 获取第三方网站详细信息
      *
-     * @param adminWebsiteId 管理员网站id
+     * @param ThirdPartyWebsiteId 管理员网站id
      * @return {@link BaseResult}<{@link ThirdPartyWebsiteDetailVO}>
      */
     @Operation(summary = "获取第三方网站详情")
     @GetMapping("/get/{id}")
     @Transactional
-    public BaseResult<ThirdPartyWebsiteDetailVO> getAdminWebsiteDetail(@PathVariable("id") Integer adminWebsiteId){
-        //todo 获取第三方网站详情
-        return null;
+    public BaseResult<ThirdPartyWebsiteDetailVO> getThirdPartyWebsiteDetail(@PathVariable("id") Integer ThirdPartyWebsiteId){
+        ThirdPartyWebsiteDetailVO websiteDetailVO = thirdPartyWebsiteService.getDetailById(ThirdPartyWebsiteId);
+        return ResultUtil.success(websiteDetailVO);
     }
 
     /**
@@ -75,7 +80,7 @@ public class ThirdPartyWebsiteController {
 /*    @Operation(summary = "获取网站图标")
     @GetMapping("/logo/get/{id}")
     @Transactional
-    public ResponseEntity<ByteArrayResource> getAdminWebsiteLogo(@PathVariable("id") Integer adminWebsiteId) throws IOException {
+    public ResponseEntity<ByteArrayResource> getThirdPartyWebsiteLogo(@PathVariable("id") Integer ThirdPartyWebsiteId) throws IOException {
         //todo 获取网站图标
         return null;
     }*/
@@ -88,22 +93,22 @@ public class ThirdPartyWebsiteController {
      */
     @Operation(summary = "上传新第三方网站")
     @PostMapping("/add")
-    public BaseResult<String> addAdminWebsite(AddThirdPartyWebsiteDTO addThirdPartyWebsiteDTO){
-        //todo 添加新第三方网站
-        return null;
+    public BaseResult<String> addThirdPartyWebsite(AddThirdPartyWebsiteDTO addThirdPartyWebsiteDTO){
+        Boolean isSuccess = thirdPartyWebsiteService.addThirdPartyWebsite(addThirdPartyWebsiteDTO);
+        return isSuccess?ResultUtil.success("新增第三方网站成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
     /**
      * 删除第三方网站
      *
-     * @param adminWebsiteId 管理员网站id
+     * @param ThirdPartyWebsiteId 管理员网站id
      * @return {@link BaseResult}<{@link String}>
      */
     @Operation(summary = "删除第三方网站")
     @DeleteMapping ("/delete/{id}")
-    public BaseResult<String> deleteAdminWebsite(@PathVariable("id") Integer adminWebsiteId){
-        //todo 删除第三方网站
-        return null;
+    public BaseResult<String> deleteThirdPartyWebsite(@PathVariable("id") Integer ThirdPartyWebsiteId){
+        Boolean isSuccess = thirdPartyWebsiteService.removeById(ThirdPartyWebsiteId);
+        return isSuccess?ResultUtil.success("删除第三方网站成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
     /**
@@ -114,38 +119,12 @@ public class ThirdPartyWebsiteController {
      */
     @Operation(summary = "修改第三方网站")
     @PostMapping("/update")
-    public BaseResult<String> updateAdminWebsite(UpdateThirdPartyWebsiteDTO updateThirdPartyWebsiteDTO){
-        //todo 修改第三方网站
-        return null;
+    public BaseResult<String> updateThirdPartyWebsite(UpdateThirdPartyWebsiteDTO updateThirdPartyWebsiteDTO){
+        Boolean isSuccess = thirdPartyWebsiteService.updateThirdPartyWebsite(updateThirdPartyWebsiteDTO);
+        return isSuccess?ResultUtil.success("更新第三方网站成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
-    /**
-     * 添加第三方网站收藏
-     *
-     * @param addFavoritesDTO 添加收藏夹dto
-     * @return {@link BaseResult}<{@link String}>
-     */
-    @Operation(summary = "新增第三方网站收藏关系")
-    @PostMapping("/favorites/add")
-    public BaseResult<String> addFavorites(@RequestBody AddFavoritesDTO addFavoritesDTO){
-        //todo 从token获取用户id
-        //todo 新增第三方网站收藏关系
-        return null;
-    }
 
-    /**
-     * 删除第三方网站收藏
-     *
-     * @param deleteFavoritesDTO 删除收藏夹dto
-     * @return {@link BaseResult}<{@link String}>
-     */
-    @Operation(summary = "删除第三方网站收藏关系")
-    @PostMapping("/favorites/delete")
-    public BaseResult<String> deleteFavorites(@RequestBody DeleteFavoritesDTO deleteFavoritesDTO){
-        //todo 从token获取用户id
-        //todo 删除第三方网站收藏关系
-        return null;
-    }
 
 
 }
