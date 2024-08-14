@@ -1,10 +1,13 @@
 package com.jingjin.userwebsiteservice.controller;
 
 import com.jingjin.common.result.BaseResult;
+import com.jingjin.common.result.ErrorCode;
+import com.jingjin.common.result.PageResponse;
+import com.jingjin.common.result.ResultUtil;
 import com.jingjin.model.userInteraction.dto.AddUserMemoDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserMemoDTO;
-import com.jingjin.model.userInteraction.vo.UserMemoPageVO;
-import com.jingjin.model.userInteraction.vo.UserWebsitePageVO;
+import com.jingjin.model.userInteraction.po.UserMemo;
+import com.jingjin.model.userInteraction.vo.UserMemoVO;
 import com.jingjin.userwebsiteservice.service.UserMemoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,22 +47,26 @@ public class UserMemoController {
     @Transactional
     public BaseResult<String> addUserMemo(AddUserMemoDTO addUserMemoDTO){
         //todo 从token获取当前用户id
-        //todo 新增用户备忘录
-        return null;
+        String userId = "bc4444cd8c686efd581469d4313b9123";
+        UserMemo userMemo = UserMemo.builder()
+                .userId(userId)
+                .title(addUserMemoDTO.getTitle())
+                .content(addUserMemoDTO.getContent())
+                .build();
+        Boolean isSuccess = userMemoService.save(userMemo);
+        return isSuccess? ResultUtil.success("新增备忘录成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
-    /**
-     * 获取用户备忘录
-     *
-     * @return {@link BaseResult}<{@link UserMemoPageVO}>
-     */
+
     @Operation(summary = "获取用户备忘录")
     @GetMapping ("/get")
     @Transactional
-    public BaseResult<UserMemoPageVO> getUserMemo(){
+    public BaseResult<PageResponse<UserMemoVO>> getUserMemo(@RequestParam(defaultValue = "1") int pageIndex,
+                                                            @RequestParam(defaultValue = "10") int pageSize){
         //todo 从token获取当前用户id
-        //todo 根据token获取当前用户备忘录
-        return null;
+        String userId = "bc4444cd8c686efd581469d4313b9123";
+        PageResponse<UserMemoVO> userMemoPageVO = userMemoService.getPageById(pageIndex,pageSize,userId);
+        return ResultUtil.success(userMemoPageVO);
     }
 
     /**
@@ -72,8 +79,13 @@ public class UserMemoController {
     @PutMapping("/update")
     @Transactional
     public BaseResult<String> updateUserMemo(UpdateUserMemoDTO updateUserMemoDTO){
-        //todo 修改用户备忘录
-        return null;
+        UserMemo userMemo = UserMemo.builder()
+                .id(updateUserMemoDTO.getId())
+                .title(updateUserMemoDTO.getTitle())
+                .content(updateUserMemoDTO.getContent())
+                .build();
+        Boolean isSuccess = userMemoService.updateById(userMemo);
+        return isSuccess? ResultUtil.success("修改备忘录成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
     /**
@@ -86,8 +98,9 @@ public class UserMemoController {
     @DeleteMapping ("/delete/{id}")
     @Transactional
     public BaseResult<String> deleteUserMemo(@PathVariable("id") Integer userMemoId){
-        //todo 删除用户备忘录
-        return null;
+        Boolean isSuccess = userMemoService.removeById(userMemoId);
+        return isSuccess? ResultUtil.success("删除备忘录成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
+
     }
 
 

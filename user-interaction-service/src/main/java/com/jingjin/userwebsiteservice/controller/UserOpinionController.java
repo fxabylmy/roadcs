@@ -1,9 +1,12 @@
 package com.jingjin.userwebsiteservice.controller;
 
 import com.jingjin.common.result.BaseResult;
+import com.jingjin.common.result.ErrorCode;
+import com.jingjin.common.result.ResultUtil;
 import com.jingjin.model.userInteraction.dto.AddUserOpinionDTO;
 import com.jingjin.model.userInteraction.dto.OpinionResponseDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserOpinionDTO;
+import com.jingjin.model.userInteraction.po.UserOpinion;
 import com.jingjin.model.userInteraction.vo.BackUserOpinionPageVO;
 import com.jingjin.model.userInteraction.vo.UserOpinionPageVO;
 import com.jingjin.userwebsiteservice.service.UserOpinionService;
@@ -46,8 +49,14 @@ public class UserOpinionController {
     @Transactional
     public BaseResult<String> addUserOpinion(AddUserOpinionDTO addUserOpinionDTO){
         //todo 从token获取当前用户id
-        //todo 新增用户意见
-        return null;
+        String userId = "bc4444cd8c686efd581469d4313b9123";
+        UserOpinion userOpinion = UserOpinion.builder()
+                .userId(userId)
+                .title(addUserOpinionDTO.getTitle())
+                .content(addUserOpinionDTO.getContent())
+                .build();
+        Boolean isSuccess = userOpinionService.save(userOpinion);
+        return isSuccess? ResultUtil.success("新增用户意见成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
     /**
