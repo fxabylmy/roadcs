@@ -12,7 +12,6 @@
         <module>service-client</module>
         <module>jwt-util</module>
         <module>model</module>
-        <module>order-service</module>
         <module>third-party-website-service</module>
         <module>user-interaction-service</module>
         <module>admin-manage-service</module>

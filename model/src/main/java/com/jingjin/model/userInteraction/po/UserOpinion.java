@@ -45,7 +45,7 @@ public class UserOpinion implements Serializable {
     /**
      * 回复者id
      */
-    private Integer responseId;
+    private String responseId;
 
     /**
      * 回复内容

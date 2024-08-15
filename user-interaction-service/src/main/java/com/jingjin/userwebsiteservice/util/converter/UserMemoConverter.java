@@ -1,7 +1,5 @@
-package com.jingjin.userwebsiteservice.util;
+package com.jingjin.userwebsiteservice.util.converter;
 
-import com.jingjin.model.thirdPartyWebsite.po.ThirdPartyWebsite;
-import com.jingjin.model.thirdPartyWebsite.vo.ThirdPartyWebsiteSimpleVO;
 import com.jingjin.model.userInteraction.po.UserMemo;
 import com.jingjin.model.userInteraction.vo.UserMemoVO;
 import org.mapstruct.Mapper;

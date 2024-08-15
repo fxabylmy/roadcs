@@ -2,13 +2,14 @@ package com.jingjin.userwebsiteservice.controller;
 
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
+import com.jingjin.common.result.PageResponse;
 import com.jingjin.common.result.ResultUtil;
 import com.jingjin.model.userInteraction.dto.AddUserOpinionDTO;
 import com.jingjin.model.userInteraction.dto.OpinionResponseDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserOpinionDTO;
 import com.jingjin.model.userInteraction.po.UserOpinion;
 import com.jingjin.model.userInteraction.vo.BackUserOpinionPageVO;
-import com.jingjin.model.userInteraction.vo.UserOpinionPageVO;
+import com.jingjin.model.userInteraction.vo.UserOpinionVO;
 import com.jingjin.userwebsiteservice.service.UserOpinionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,15 +63,17 @@ public class UserOpinionController {
     /**
      * 用户获取已提交意见
      *
-     * @return {@link BaseResult}<{@link UserOpinionPageVO}>
+     * @return {@link BaseResult}<{@link PageResponse}<{@link UserOpinionVO}>>
      */
     @Operation(summary = "用户获取已提交意见")
     @GetMapping ("/get")
     @Transactional
-    public BaseResult<UserOpinionPageVO> getUserOpinion(){
+    public BaseResult<PageResponse<UserOpinionVO>> getUserOpinion(@RequestParam(defaultValue = "1") int pageIndex,
+                                                                  @RequestParam(defaultValue = "10") int pageSize){
         //todo 从token获取当前用户id
-        //todo 根据token获取当前用户意见
-        return null;
+        String userId = "bc4444cd8c686efd581469d4313b9123";
+        PageResponse<UserOpinionVO> userOpinionPageVO = userOpinionService.getPageById(userId,pageIndex,pageSize);
+        return ResultUtil.success(userOpinionPageVO);
     }
 
     /**
@@ -81,7 +84,8 @@ public class UserOpinionController {
     @Operation(summary = "管理员获取用户意见")
     @GetMapping ("/back/get")
     @Transactional
-    public BaseResult<BackUserOpinionPageVO> getBackUserOpinion(){
+    public BaseResult<BackUserOpinionPageVO> getBackUserOpinion(@RequestParam(defaultValue = "1") int pageIndex,
+                                                                @RequestParam(defaultValue = "10") int pageSize){
         //todo 获取全部的用户意见
         return null;
     }

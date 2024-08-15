@@ -30,9 +30,9 @@ public class UserOpinionVO implements Serializable {
     private String content;
 
     /**
-     * 回复者id
+     * 回复者名字
      */
-    private Integer responseId;
+    private String responseName;
 
     /**
      * 回复内容

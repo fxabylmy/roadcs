@@ -21,5 +21,5 @@ public interface UserFeignClient {
      * @return {@link User}
      */
     @GetMapping("/get/id")
-    User getUserById(@RequestParam("userId") Long userId);
+    User getUserById(@RequestParam("userId") String userId);
 }

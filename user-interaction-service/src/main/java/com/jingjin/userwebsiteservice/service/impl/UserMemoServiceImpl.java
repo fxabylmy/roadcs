@@ -10,7 +10,7 @@ import com.jingjin.model.userInteraction.po.UserMemo;
 import com.jingjin.model.userInteraction.vo.UserMemoVO;
 import com.jingjin.userwebsiteservice.mapper.UserMemoMapper;
 import com.jingjin.userwebsiteservice.service.UserMemoService;
-import com.jingjin.userwebsiteservice.util.UserMemoConverter;
+import com.jingjin.userwebsiteservice.util.converter.UserMemoConverter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

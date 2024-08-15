@@ -32,7 +32,7 @@ public class UserInnerController implements UserFeignClient {
      * @return {@link User}
      */
     @Override
-    public User getUserById(Long userId) {
+    public User getUserById(String userId) {
         User user = userService.getById(userId);
         return user;
     }
