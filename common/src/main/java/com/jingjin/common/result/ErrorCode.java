@@ -15,6 +15,7 @@ public enum ErrorCode {
     PARAMS_ERROR(50010,"参数错误"),
     DATABASE_ERROR(50020, "数据库操作失败"),
     LOGOUT_ERROR(50030,"登出失败"),
+    SENDEMAIL_ERROR(50040,"邮箱验证码发送失败"),
     TOKEN_MISSION(40010,"Token丢失"),
     TOKEN_INVALID(40020,"Token无效"),
     VALIDATE_FAILED(50040,"参数检验失败"),

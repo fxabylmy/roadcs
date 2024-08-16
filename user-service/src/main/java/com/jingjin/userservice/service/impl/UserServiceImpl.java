@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jingjin.common.exception.BusinessException;
 import com.jingjin.common.result.ErrorCode;
 
+import com.jingjin.common.utils.JavaMailUtils;
 import com.jingjin.jwtutil.jwtUtil.JwtTokenUtil;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.po.User;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static com.jingjin.common.exception.ThrowUtils.throwIf;
 import static com.jingjin.common.result.ErrorCode.LOGOUT_ERROR;
@@ -49,6 +53,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
     @Resource
     private UploadUtil uploadUtil;
+
+    /**
+     * redis工具类
+     */
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    /**
+     * 邮箱验证码服务工具类
+     */
+    @Resource
+    private JavaMailUtils javaMailUtils;
 
     /**
      * 兔子模板
@@ -130,6 +146,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         return imageBytes;
     }
 
+    /**
+     * 邮箱验证码的发送
+     * @param email 用户邮箱
+     * @return Boolean
+     */
+    @Override
+    public Boolean sendEmail(String email) {
+        // 生成6位随机验证码
+        String verificationCode = String.format("%06d", new Random().nextInt(1000000));
+
+        // 将验证码存储到 Redis 中，设置2分钟的过期时间
+        stringRedisTemplate.opsForValue().set("EMAIL_VERIFICATION_CODE:" + email, verificationCode, 2, TimeUnit.MINUTES);
+
+        // 发送邮件
+        try {
+            javaMailUtils.sendMessage(email, verificationCode);
+        } catch (Exception e) {
+            throw new RuntimeException("发送邮件失败", e);
+        }
+        return true;
+    }
+
 
     /**
      * 用户登录
@@ -195,8 +233,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         throwIf(!logoutResult,LOGOUT_ERROR);
         return true;
     }
-
-
-
 
 }

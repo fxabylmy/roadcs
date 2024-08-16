@@ -23,4 +23,6 @@ public interface UserService extends IService<User> {
     Boolean uploadAvatar(MultipartFile avatar, String userId) throws IOException;
 
     byte[] getAvatar(String userId) throws IOException;
+
+    Boolean sendEmail(String email);
 }

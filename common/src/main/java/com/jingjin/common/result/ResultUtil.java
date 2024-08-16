@@ -25,7 +25,7 @@ public class ResultUtil {
      *
      * @return {@link BaseResult}<{@link T}>
      */
-    public static <T> BaseResult<T> success() {
+    public static <T> BaseResult<T> success(String 发送成功) {
         return new BaseResult<>(SUCCESS.getCode(),SUCCESS.getMessage());
     }
 
@@ -53,4 +53,5 @@ public class ResultUtil {
     public static <T> BaseResult<T> error(ErrorCode errorCode) {
         return new BaseResult<>(errorCode.getCode(),errorCode.getMessage());
     }
+
 }

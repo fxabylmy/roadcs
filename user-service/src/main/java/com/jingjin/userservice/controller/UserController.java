@@ -22,9 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -48,6 +46,19 @@ public class UserController {
      */
     @Resource
     private UserService userService;
+
+    /**
+     * 发送邮箱验证码
+     *
+     * @param email 对应邮箱
+     * @return {@link BaseResult}<{@link String}>
+     */
+    @Operation(summary = "发送邮箱验证码")
+    @GetMapping("/sendEmail")
+    public BaseResult<Map<String, Object>> sendEmail(String email){
+        Boolean isSuccess = userService.sendEmail(email);
+        return isSuccess?ResultUtil.success("邮箱验证码发送成功"):ResultUtil.error(ErrorCode.SENDEMAIL_ERROR);
+    }
 
     /**
      * 注册
@@ -103,7 +114,7 @@ public class UserController {
         String userId = "bc4444cd8c686efd581469d4313b9123";
         Boolean logoutResult = userService.logout(userId);
         if (logoutResult){
-            return ResultUtil.success();
+            return ResultUtil.success("发送成功");
         }
         return ResultUtil.error(SYSTEM_ERROR);
     }
