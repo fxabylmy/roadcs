@@ -10,8 +10,10 @@ import com.jingjin.common.utils.JavaMailUtils;
 import com.jingjin.jwtutil.jwtUtil.JwtTokenUtil;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.po.User;
+import com.jingjin.model.user.po.UserRole;
 import com.jingjin.serviceClient.service.order.OrderFeignClient;
 import com.jingjin.userservice.mapper.UserMapper;
+import com.jingjin.userservice.mapper.UserRoleMapper;
 import com.jingjin.userservice.service.UserService;
 import com.jingjin.userservice.util.UploadUtil;
 import jakarta.annotation.Resource;
@@ -67,6 +69,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     private JavaMailUtils javaMailUtils;
 
     /**
+     * 用户-角色映射器
+     */
+    @Resource
+    private UserRoleMapper userRoleMapper;
+
+    /**
      * 兔子模板
      */
     @Resource
@@ -100,6 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     public Boolean userRegister(UserRegisterDTO userRegisterDTO) {
         String email = userRegisterDTO.getEmail();
         String password = userRegisterDTO.getPassword();
+
         //1.账号查重
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("email", email);
@@ -109,13 +118,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         }
         //2.密码加密
         String digestPassword = DigestUtil.md5Hex(SALT + password);
-        //todo 3.验证码验证
-        //4.写入数据库
+
+        // 3.验证码验证
+        if (email != null) {
+            boolean isCodeValid = confirmEmail(email, userRegisterDTO.getEmailCode());
+            if (!isCodeValid) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码错误或已过期");
+            }
+        }
+        //4.写入数据库：用户表和用户-角色关系表（默认都是角色都是网站用户）
         User user = User.builder().email(email).password(digestPassword).build();
-        int insert = userMapper.insert(user);
-        if (insert <= 0) {
+        int insertUser = userMapper.insert(user);
+
+        // 写进用户-角色表
+        UserRole userRole = UserRole.builder().userId(user.getId()).build();
+        int insertUserRole = userRoleMapper.insert(userRole);
+        if (insertUser <= 0 || insertUserRole <= 0) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
         }
+
         return true;
     }
 
