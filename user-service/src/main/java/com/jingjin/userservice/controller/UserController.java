@@ -56,18 +56,23 @@ public class UserController {
      */
     @Operation(summary = "发送邮箱验证码")
     @GetMapping("/sendEmail")
-    public BaseResult<Map<String, Object>> sendEmail(String email){
+    public BaseResult<String> sendEmail(String email){
         Boolean isSuccess = userService.sendEmail(email);
         return isSuccess?ResultUtil.success("邮箱验证码发送成功"):ResultUtil.error(ErrorCode.SENDEMAIL_ERROR);
     }
 
+    /**
+     * 确认邮箱验证码
+     * @param userEmailConfirmDTO 邮箱验证码对应DTO
+     * @return 正确与否
+     */
     @Operation(summary = "邮箱验证码验证")
     @PostMapping("/confirmEmail")
-    public BaseResult<Map<String, Object>> emailConfirm(@RequestBody UserEmailConfirmDTO userEmailConfirmDTO){
+    public BaseResult<String> emailConfirm(@RequestBody UserEmailConfirmDTO userEmailConfirmDTO){
         String email = userEmailConfirmDTO.getEmail();
         String emailCode = userEmailConfirmDTO.getEmailCode();
         Boolean isSuccess = userService.confirmEmail(email, emailCode);
-        return isSuccess?ResultUtil.success("ok"):ResultUtil.error(ErrorCode.REGISTER);
+        return isSuccess?ResultUtil.success("验证成功"):ResultUtil.error(ErrorCode.REGISTER);
     }
 
     /**
@@ -119,7 +124,7 @@ public class UserController {
      */
     @Operation(summary = "用户登出")
     @PostMapping("/logout")
-    public BaseResult<Map<String, Object>> Logout(){
+    public BaseResult<String> Logout(){
         //todo 从token获取userId
         String userId = "bc4444cd8c686efd581469d4313b9123";
         Boolean logoutResult = userService.logout(userId);
