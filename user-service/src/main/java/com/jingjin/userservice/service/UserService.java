@@ -25,4 +25,6 @@ public interface UserService extends IService<User> {
     byte[] getAvatar(String userId) throws IOException;
 
     Boolean sendEmail(String email);
+
+    Boolean confirmEmail(String email, String emailCode);
 }

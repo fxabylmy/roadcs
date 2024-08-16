@@ -168,6 +168,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         return true;
     }
 
+    /**
+     * 验证邮箱验证码
+     * @param email 邮箱账号
+     * @param emailCode 邮箱验证码
+     * @return 正确与否
+     */
+    @Override
+    public Boolean confirmEmail(String email, String emailCode) {
+        // 从 Redis 中获取验证码
+        String storedCode = stringRedisTemplate.opsForValue().get("EMAIL_VERIFICATION_CODE:" + email);
+
+        // 验证码是否存在以及是否匹配
+        return storedCode != null && storedCode.equals(emailCode);
+    }
+
 
     /**
      * 用户登录

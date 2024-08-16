@@ -6,6 +6,7 @@ import com.jingjin.common.result.ResultUtil;
 import com.jingjin.model.user.dto.UserLoginRequest;
 import com.jingjin.model.user.dto.user.UploadAvatarDTO;
 import com.jingjin.model.user.dto.user.UploadBackgroundDTO;
+import com.jingjin.model.user.dto.user.UserEmailConfirmDTO;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.vo.UserDetailVO;
 import com.jingjin.userservice.service.UserService;
@@ -58,6 +59,15 @@ public class UserController {
     public BaseResult<Map<String, Object>> sendEmail(String email){
         Boolean isSuccess = userService.sendEmail(email);
         return isSuccess?ResultUtil.success("邮箱验证码发送成功"):ResultUtil.error(ErrorCode.SENDEMAIL_ERROR);
+    }
+
+    @Operation(summary = "邮箱验证码验证")
+    @PostMapping("/confirmEmail")
+    public BaseResult<Map<String, Object>> emailConfirm(@RequestBody UserEmailConfirmDTO userEmailConfirmDTO){
+        String email = userEmailConfirmDTO.getEmail();
+        String emailCode = userEmailConfirmDTO.getEmailCode();
+        Boolean isSuccess = userService.confirmEmail(email, emailCode);
+        return isSuccess?ResultUtil.success("ok"):ResultUtil.error(ErrorCode.REGISTER);
     }
 
     /**
