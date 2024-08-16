@@ -1,6 +1,7 @@
 package com.jingjin.userservice.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jingjin.model.user.dto.user.UploadPasswordDTO;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.po.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,4 +28,6 @@ public interface UserService extends IService<User> {
     Boolean sendEmail(String email);
 
     Boolean confirmEmail(String email, String emailCode);
+
+    Boolean passwordReWrite(UploadPasswordDTO uploadPasswordDTO);
 }

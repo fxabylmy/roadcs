@@ -2,12 +2,14 @@ package com.jingjin.userservice.service.impl;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jingjin.common.exception.BusinessException;
 import com.jingjin.common.result.ErrorCode;
 
 import com.jingjin.common.utils.JavaMailUtils;
 import com.jingjin.jwtutil.jwtUtil.JwtTokenUtil;
+import com.jingjin.model.user.dto.user.UploadPasswordDTO;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.po.User;
 import com.jingjin.model.user.po.UserRole;
@@ -202,6 +204,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
         // 验证码是否存在以及是否匹配
         return storedCode != null && storedCode.equals(emailCode);
+    }
+
+    /**
+     * 用户密码重置
+     * @param uploadPasswordDTO 密码重置DTO
+     */
+    @Override
+    public Boolean passwordReWrite(UploadPasswordDTO uploadPasswordDTO) {
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        // 1.这里用email来标识用户
+        String email = uploadPasswordDTO.getEmail();
+        String newPassword = uploadPasswordDTO.getNewPassword();
+        // 2.密码加密
+        String digestNewPassword = DigestUtil.md5Hex(SALT + newPassword);
+        updateWrapper.eq("email", email).set("password", digestNewPassword);
+        int update = userMapper.update(null, updateWrapper);
+        return update > 0;
     }
 
 

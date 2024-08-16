@@ -4,10 +4,7 @@ import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.ResultUtil;
 import com.jingjin.model.user.dto.UserLoginRequest;
-import com.jingjin.model.user.dto.user.UploadAvatarDTO;
-import com.jingjin.model.user.dto.user.UploadBackgroundDTO;
-import com.jingjin.model.user.dto.user.UserEmailConfirmDTO;
-import com.jingjin.model.user.dto.user.UserRegisterDTO;
+import com.jingjin.model.user.dto.user.*;
 import com.jingjin.model.user.vo.UserDetailVO;
 import com.jingjin.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -86,6 +83,17 @@ public class UserController {
     public BaseResult<String> Register(@RequestBody UserRegisterDTO userRegisterDTO){
         Boolean isSuccess = userService.userRegister(userRegisterDTO);
         return isSuccess?ResultUtil.success("注册成功"):ResultUtil.error(ErrorCode.REGISTER);
+    }
+
+    /**
+     * 用户重置密码接口
+     * @param uploadPasswordDTO 新密码重置DTO
+     */
+    @Operation(summary = "用户重置密码接口")
+    @PostMapping("/passwordReWrite")
+    public BaseResult<String> passwordReWrite(@RequestBody UploadPasswordDTO uploadPasswordDTO){
+        Boolean isSuccess = userService.passwordReWrite(uploadPasswordDTO);
+        return isSuccess?ResultUtil.success("密码重置成功"):ResultUtil.error(ErrorCode.REGISTER);
     }
 
     /**
