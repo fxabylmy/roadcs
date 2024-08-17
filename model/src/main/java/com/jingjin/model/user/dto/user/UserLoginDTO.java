@@ -1,4 +1,4 @@
-package com.jingjin.model.user.dto;
+package com.jingjin.model.user.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Data
 @Schema(description = "用户登录请求")
-public class UserLoginRequest implements Serializable {
+public class UserLoginDTO implements Serializable {
 
     /**
      * 用户帐户

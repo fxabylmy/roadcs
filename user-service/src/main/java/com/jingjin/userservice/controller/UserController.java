@@ -3,7 +3,7 @@ package com.jingjin.userservice.controller;
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.ResultUtil;
-import com.jingjin.model.user.dto.UserLoginRequest;
+import com.jingjin.model.user.dto.user.UserLoginDTO;
 import com.jingjin.model.user.dto.user.*;
 import com.jingjin.model.user.vo.UserDetailVO;
 import com.jingjin.userservice.service.UserService;
@@ -99,14 +99,14 @@ public class UserController {
     /**
      * 登录
      *
-     * @param userLoginRequest 用户登录请求
+     * @param userLoginDTO 用户登录请求DTO
      * @return {@link BaseResult}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "用户统一登录接口")
     @PostMapping("/login")
-    public BaseResult<Map<String, Object>> Login(@RequestBody UserLoginRequest userLoginRequest){
-        String account = userLoginRequest.getAccount();
-        String password = userLoginRequest.getPassword();
+    public BaseResult<Map<String, Object>> Login(@RequestBody UserLoginDTO userLoginDTO){
+        String account = userLoginDTO.getAccount();
+        String password = userLoginDTO.getPassword();
         Map<String, Object> tokenMap = userService.userLogin(account,password);
         return ResultUtil.success(tokenMap);
     }
