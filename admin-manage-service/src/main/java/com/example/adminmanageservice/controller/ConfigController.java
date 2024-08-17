@@ -2,6 +2,7 @@ package com.example.adminmanageservice.controller;
 
 import com.example.adminmanageservice.service.ConfigService;
 import com.jingjin.common.result.BaseResult;
+import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.adminManage.dto.UpdateConfigDTO;
 import com.jingjin.model.adminManage.vo.ConfigPageVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +57,8 @@ public class ConfigController {
     @Operation(summary = "修改网站配置")
     @PostMapping("/update")
     public BaseResult<String> updateConfig(UpdateConfigDTO updateConfigDTO){
-        //todo 从token获取管理员id
+        // 从token获取管理员id
+        String userId = UserContext.getUserId();
         //todo 修改网站配置
         return null;
     }

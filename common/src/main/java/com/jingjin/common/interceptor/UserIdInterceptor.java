@@ -22,13 +22,6 @@ public class UserIdInterceptor implements HandlerInterceptor {
             // 不为空，保存到ThreadLocal
             UserContext.setUserId(userId);
         }
-//        // 1.获取请求头中的用户信息
-//        String userPermission = request.getHeader("userPermission");
-//        // 2.判断是否为空
-//        if (StrUtil.isNotBlank(userPermission)) {
-//            // 不为空，保存到ThreadLocal
-//            UserContext.setUser(Long.valueOf(userId));
-//        }
         // 3.放行
         return true;
     }

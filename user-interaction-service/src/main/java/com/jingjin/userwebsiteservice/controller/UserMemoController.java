@@ -4,6 +4,7 @@ import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.PageResponse;
 import com.jingjin.common.result.ResultUtil;
+import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.userInteraction.dto.AddUserMemoDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserMemoDTO;
 import com.jingjin.model.userInteraction.po.UserMemo;
@@ -46,8 +47,8 @@ public class UserMemoController {
     @PostMapping ("/add")
     @Transactional
     public BaseResult<String> addUserMemo(AddUserMemoDTO addUserMemoDTO){
-        //todo 从token获取当前用户id
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取当前用户id
+        String userId = UserContext.getUserId();
         UserMemo userMemo = UserMemo.builder()
                 .userId(userId)
                 .title(addUserMemoDTO.getTitle())
@@ -63,8 +64,8 @@ public class UserMemoController {
     @Transactional
     public BaseResult<PageResponse<UserMemoVO>> getUserMemo(@RequestParam(defaultValue = "1") int pageIndex,
                                                             @RequestParam(defaultValue = "10") int pageSize){
-        //todo 从token获取当前用户id
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取当前用户id
+        String userId = UserContext.getUserId();
         PageResponse<UserMemoVO> userMemoPageVO = userMemoService.getPageById(pageIndex,pageSize,userId);
         return ResultUtil.success(userMemoPageVO);
     }

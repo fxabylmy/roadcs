@@ -3,6 +3,7 @@ package com.jingjin.thirdpartywebsiteservice.controller;
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.ResultUtil;
+import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.thirdPartyWebsite.dto.AddFavoritesDTO;
 import com.jingjin.model.thirdPartyWebsite.dto.DeleteFavoritesDTO;
 import com.jingjin.model.thirdPartyWebsite.po.UserFavorites;
@@ -48,8 +49,8 @@ public class UserFavoritesController {
     @GetMapping("/get/list")
     @Transactional
     public BaseResult<List<ThirdPartyWebsiteSimpleVO>> getAdminWebsiteDetail(){
-        //todo 从token获取用户id
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取用户id
+        String userId = UserContext.getUserId();
         List<Integer> ids = userFavoritesService.getWebsiteIdsByUserId(userId);
         List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = thirdPartyWebsiteService.getByIds(ids);
         return ResultUtil.success(websiteSimpleVOList);
@@ -64,8 +65,8 @@ public class UserFavoritesController {
     @Operation(summary = "新增第三方网站收藏关系")
     @PostMapping("/add")
     public BaseResult<String> addFavorites(@RequestBody AddFavoritesDTO addFavoritesDTO){
-        //todo 从token获取用户id
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取用户id
+        String userId = UserContext.getUserId();
         Integer webSiteId = addFavoritesDTO.getThirdPartyWebsiteId();
         UserFavorites userFavorites = UserFavorites.builder()
                 .userId(userId)

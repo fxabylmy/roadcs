@@ -3,6 +3,7 @@ package com.jingjin.userservice.controller;
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.ResultUtil;
+import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.user.dto.user.UserLoginDTO;
 import com.jingjin.model.user.dto.user.*;
 import com.jingjin.model.user.vo.UserDetailVO;
@@ -133,8 +134,8 @@ public class UserController {
     @Operation(summary = "用户登出")
     @PostMapping("/logout")
     public BaseResult<String> Logout(){
-        //todo 从token获取userId
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取userId
+        String userId = UserContext.getUserId();
         Boolean logoutResult = userService.logout(userId);
         if (logoutResult){
             return ResultUtil.success("发送成功");
@@ -146,8 +147,8 @@ public class UserController {
     @PostMapping("/avatar/upload")
     @Transactional
     public BaseResult<String> uploadAvatar(UploadAvatarDTO uploadAvatarDTO) throws Exception {
-        //todo  从token获取userId
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取userId
+        String userId = UserContext.getUserId();
         Boolean isSuccess = userService.uploadAvatar(uploadAvatarDTO.getAvatar(),userId);
         return isSuccess?ResultUtil.success("头像上传成功"):ResultUtil.error(SYSTEM_ERROR);
     }
@@ -156,8 +157,8 @@ public class UserController {
     @GetMapping("/avatar/get")
     @Transactional
     public ResponseEntity<ByteArrayResource> getAvatar() throws IOException {
-        //todo  从token获取userId
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取userId
+        String userId = UserContext.getUserId();
         byte[] imageBytes = userService.getAvatar(userId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
