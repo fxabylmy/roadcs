@@ -82,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     private UserRoleMapper userRoleMapper;
 
     /**
-     * 角色权限映射器
+     * 角色-权限映射器
      */
     @Resource
     private RolePermissionMapper rolePermissionMapper;

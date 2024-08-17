@@ -18,6 +18,7 @@ public enum ErrorCode {
     SENDEMAIL_ERROR(50040,"邮箱验证码发送失败"),
     TOKEN_MISSION(40010,"Token丢失"),
     TOKEN_INVALID(40020,"Token无效"),
+    PRTMISSION_ERROR(40030,"您无权进行此操作"),
     VALIDATE_FAILED(50040,"参数检验失败"),
     PICTURE_MISSION(50040,"图片获取失败"),
     PICTURE_UPLOAD_ERROR(50040,"图片上传失败");
