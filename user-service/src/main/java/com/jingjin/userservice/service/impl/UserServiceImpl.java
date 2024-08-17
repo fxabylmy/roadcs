@@ -14,6 +14,8 @@ import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.po.User;
 import com.jingjin.model.user.po.UserRole;
 import com.jingjin.serviceClient.service.order.OrderFeignClient;
+import com.jingjin.userservice.mapper.PermissionMapper;
+import com.jingjin.userservice.mapper.RolePermissionMapper;
 import com.jingjin.userservice.mapper.UserMapper;
 import com.jingjin.userservice.mapper.UserRoleMapper;
 import com.jingjin.userservice.service.UserService;
@@ -31,9 +33,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.jingjin.common.exception.ThrowUtils.throwIf;
 import static com.jingjin.common.result.ErrorCode.LOGOUT_ERROR;
@@ -75,6 +80,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
      */
     @Resource
     private UserRoleMapper userRoleMapper;
+
+    /**
+     * 角色权限映射器
+     */
+    @Resource
+    private RolePermissionMapper rolePermissionMapper;
+
+    /**
+     * 权限映射器
+     */
+    @Resource
+    private PermissionMapper permissionMapper;
+
 
     /**
      * 兔子模板
@@ -233,25 +251,51 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
      */
     @Override
     public Map<String, Object> userLogin(String account, String password) {
-        //1.参数校验
+        // 1.参数校验
         if (StringUtils.isAnyBlank(account, password)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
-        //2.加密
-        String digestPassword = DigestUtil.md5Hex(SALT + password);
-        // 查询用户是否存在
+        // 2.使用MD5对密码进行加密
+        String encryptPassword = DigestUtil.md5Hex(SALT + password);
+
+        // 3.查询用户是否存在
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("email", account);
-        queryWrapper.eq("password", digestPassword);
-        User user = userMapper.selectOne(queryWrapper);
+        queryWrapper.eq("password", encryptPassword);
+        User user = this.baseMapper.selectOne(queryWrapper);
         // 用户不存在
         if (user == null) {
-            log.info("登陆失败，用户不存在");
+            log.info("user login failed, userAccount cannot match userPassword");
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
-        // 3. 记录用户的Id
-        Map<String, Object> tokenMap = jwtTokenUtil
-                .generateTokenAndRefreshToken(String.valueOf(user.getId()),user.getId());
+
+        // 4. 查询用户的Id和用户权限
+        List<String> roleIds = userRoleMapper.findRoleIdsByUserId(user.getId());
+        List<String> perms = new ArrayList<>();
+
+        if (!roleIds.isEmpty()) {
+            // 查询所有角色的权限
+            List<String> permissionIds = rolePermissionMapper.findPermissionsByRoleIds(roleIds);
+
+            // 去重处理
+            permissionIds = permissionIds.stream().distinct().collect(Collectors.toList());
+
+            // 加载权限路由
+            perms = permissionMapper.findPermsByPermissionIds(permissionIds);
+
+            // 去重处理
+            perms = perms.stream().distinct().collect(Collectors.toList());
+
+        } else {
+            // 处理没有角色的情况，可能返回一个空列表或抛出异常
+            log.info("user login failed, userAccount cannot match userPassword");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "改用户无角色身份");
+        }
+
+        // 3. 记录用户的Id和用户权限
+        Map<String, Object> tokenMap = jwtTokenUtil.
+                generateTokenAndRefreshToken(String.valueOf(user.getId()), perms);
+
         return tokenMap;
     }
 
