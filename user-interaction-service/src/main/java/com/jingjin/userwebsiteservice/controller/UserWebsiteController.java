@@ -74,7 +74,7 @@ public class UserWebsiteController {
      */
     @Operation(summary = "上传新用户自定义网站")
     @PostMapping("/add")
-    public BaseResult<String> addUserWebsite(AddUserWebsiteDTO addUserWebsiteDTO){
+    public BaseResult<String> addUserWebsite(@RequestBody AddUserWebsiteDTO addUserWebsiteDTO){
         //todo 添加新用户自定义网站
         return null;
     }
@@ -99,7 +99,7 @@ public class UserWebsiteController {
      * @return {@link BaseResult}<{@link String}>
      */
     @Operation(summary = "修改用户自定义网站")
-    @PostMapping("/update")
+    @PutMapping("/update")
     public BaseResult<String> updateAdminWebsite(UpdateUserWebsiteDTO updateUserWebsiteDTO){
         //todo 修改用户自定义网站
         return null;

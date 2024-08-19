@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.Serializable;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateThirdPartyWebsiteDTO implements Serializable {

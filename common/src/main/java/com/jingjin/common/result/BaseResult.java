@@ -21,9 +21,9 @@ public class BaseResult<T> implements Serializable {
     private int code;
 
     /**
-     * 日期
+     * 数据
      */
-    private T date;
+    private T data;
 
     /**
      * 信息

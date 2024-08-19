@@ -118,7 +118,7 @@ public class ThirdPartyWebsiteController {
      * @return {@link BaseResult}<{@link String}>
      */
     @Operation(summary = "修改第三方网站")
-    @PostMapping("/update")
+    @PutMapping("/update")
     public BaseResult<String> updateThirdPartyWebsite(UpdateThirdPartyWebsiteDTO updateThirdPartyWebsiteDTO){
         Boolean isSuccess = thirdPartyWebsiteService.updateThirdPartyWebsite(updateThirdPartyWebsiteDTO);
         return isSuccess?ResultUtil.success("更新第三方网站成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);

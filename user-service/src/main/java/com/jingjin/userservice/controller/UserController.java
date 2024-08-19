@@ -109,7 +109,7 @@ public class UserController {
     }
 
     @Operation(summary = "用户更改头像")
-    @PostMapping("/avatar/upload")
+    @PutMapping("/avatar/upload")
     @Transactional
     public BaseResult<String> uploadAvatar(UploadAvatarDTO uploadAvatarDTO) throws Exception {
         //todo  从token获取userId
@@ -135,7 +135,7 @@ public class UserController {
         }
 
     @Operation(summary = "用户更改背景")
-    @PostMapping("/background/upload")
+    @PutMapping("/background/upload")
     @Transactional
     public BaseResult<String> uploadBackground(UploadBackgroundDTO uploadBackgroundDTO) throws Exception {
         //todo  用户更改背景

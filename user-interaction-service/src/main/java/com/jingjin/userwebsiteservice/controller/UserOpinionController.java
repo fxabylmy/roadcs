@@ -48,7 +48,7 @@ public class UserOpinionController {
     @Operation(summary = "新增用户意见")
     @PostMapping ("/add")
     @Transactional
-    public BaseResult<String> addUserOpinion(AddUserOpinionDTO addUserOpinionDTO){
+    public BaseResult<String> addUserOpinion(@RequestBody AddUserOpinionDTO addUserOpinionDTO){
         //todo 从token获取当前用户id
         String userId = "bc4444cd8c686efd581469d4313b9123";
         UserOpinion userOpinion = UserOpinion.builder()
@@ -99,7 +99,7 @@ public class UserOpinionController {
     @Operation(summary = "用户修改用户意见")
     @PutMapping("/update")
     @Transactional
-    public BaseResult<String> updateUserOpinion(UpdateUserOpinionDTO updateUserOpinionDTO){
+    public BaseResult<String> updateUserOpinion(@RequestBody UpdateUserOpinionDTO updateUserOpinionDTO){
         //todo 修改用户意见
         return null;
     }
