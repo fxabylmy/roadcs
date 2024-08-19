@@ -1,6 +1,7 @@
 package com.jingjin.userwebsiteservice.controller;
 
 import com.jingjin.common.result.BaseResult;
+import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.userInteraction.dto.AddUserWebsiteDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserWebsiteDTO;
 import com.jingjin.model.userInteraction.vo.UserWebsitePageVO;
@@ -45,7 +46,8 @@ public class UserWebsiteController {
     @GetMapping("/get/list")
     @Transactional
     public BaseResult<UserWebsitePageVO> getAdminWebsiteDetail(){
-        //todo 从token获取当前用户id
+        // 从token获取当前用户id
+        String userId = UserContext.getUserId();
         //todo 获取用户自定义网站列表
         return null;
     }

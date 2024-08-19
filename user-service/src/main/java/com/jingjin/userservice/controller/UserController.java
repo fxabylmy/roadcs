@@ -3,10 +3,9 @@ package com.jingjin.userservice.controller;
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.ResultUtil;
-import com.jingjin.model.user.dto.UserLoginRequest;
-import com.jingjin.model.user.dto.user.UploadAvatarDTO;
-import com.jingjin.model.user.dto.user.UploadBackgroundDTO;
-import com.jingjin.model.user.dto.user.UserRegisterDTO;
+import com.jingjin.common.utils.UserContext;
+import com.jingjin.model.user.dto.user.UserLoginDTO;
+import com.jingjin.model.user.dto.user.*;
 import com.jingjin.model.user.vo.UserDetailVO;
 import com.jingjin.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,9 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -50,6 +47,33 @@ public class UserController {
     private UserService userService;
 
     /**
+     * 发送邮箱验证码
+     *
+     * @param email 对应邮箱
+     * @return {@link BaseResult}<{@link String}>
+     */
+    @Operation(summary = "发送邮箱验证码")
+    @GetMapping("/sendEmail")
+    public BaseResult<String> sendEmail(String email){
+        Boolean isSuccess = userService.sendEmail(email);
+        return isSuccess?ResultUtil.success("邮箱验证码发送成功"):ResultUtil.error(ErrorCode.SENDEMAIL_ERROR);
+    }
+
+    /**
+     * 确认邮箱验证码
+     * @param userEmailConfirmDTO 邮箱验证码对应DTO
+     * @return 正确与否
+     */
+    @Operation(summary = "邮箱验证码验证")
+    @PostMapping("/confirmEmail")
+    public BaseResult<String> emailConfirm(@RequestBody UserEmailConfirmDTO userEmailConfirmDTO){
+        String email = userEmailConfirmDTO.getEmail();
+        String emailCode = userEmailConfirmDTO.getEmailCode();
+        Boolean isSuccess = userService.confirmEmail(email, emailCode);
+        return isSuccess?ResultUtil.success("验证成功"):ResultUtil.error(ErrorCode.REGISTER);
+    }
+
+    /**
      * 注册
      *
      * @param userRegisterDTO 用户注册dto
@@ -63,16 +87,27 @@ public class UserController {
     }
 
     /**
+     * 用户重置密码接口
+     * @param uploadPasswordDTO 新密码重置DTO
+     */
+    @Operation(summary = "用户重置密码接口")
+    @PostMapping("/passwordReWrite")
+    public BaseResult<String> passwordReWrite(@RequestBody UploadPasswordDTO uploadPasswordDTO){
+        Boolean isSuccess = userService.passwordReWrite(uploadPasswordDTO);
+        return isSuccess?ResultUtil.success("密码重置成功"):ResultUtil.error(ErrorCode.REGISTER);
+    }
+
+    /**
      * 登录
      *
-     * @param userLoginRequest 用户登录请求
+     * @param userLoginDTO 用户登录请求DTO
      * @return {@link BaseResult}<{@link Map}<{@link String}, {@link Object}>>
      */
     @Operation(summary = "用户统一登录接口")
     @PostMapping("/login")
-    public BaseResult<Map<String, Object>> Login(@RequestBody UserLoginRequest userLoginRequest){
-        String account = userLoginRequest.getAccount();
-        String password = userLoginRequest.getPassword();
+    public BaseResult<Map<String, Object>> Login(@RequestBody UserLoginDTO userLoginDTO){
+        String account = userLoginDTO.getAccount();
+        String password = userLoginDTO.getPassword();
         Map<String, Object> tokenMap = userService.userLogin(account,password);
         return ResultUtil.success(tokenMap);
     }
@@ -98,12 +133,12 @@ public class UserController {
      */
     @Operation(summary = "用户登出")
     @PostMapping("/logout")
-    public BaseResult<Map<String, Object>> Logout(){
-        //todo 从token获取userId
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+    public BaseResult<String> Logout(){
+        // 从token获取userId
+        String userId = UserContext.getUserId();
         Boolean logoutResult = userService.logout(userId);
         if (logoutResult){
-            return ResultUtil.success();
+            return ResultUtil.success("发送成功");
         }
         return ResultUtil.error(SYSTEM_ERROR);
     }
@@ -112,8 +147,8 @@ public class UserController {
     @PutMapping("/avatar/upload")
     @Transactional
     public BaseResult<String> uploadAvatar(UploadAvatarDTO uploadAvatarDTO) throws Exception {
-        //todo  从token获取userId
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取userId
+        String userId = UserContext.getUserId();
         Boolean isSuccess = userService.uploadAvatar(uploadAvatarDTO.getAvatar(),userId);
         return isSuccess?ResultUtil.success("头像上传成功"):ResultUtil.error(SYSTEM_ERROR);
     }
@@ -122,8 +157,8 @@ public class UserController {
     @GetMapping("/avatar/get")
     @Transactional
     public ResponseEntity<ByteArrayResource> getAvatar() throws IOException {
-        //todo  从token获取userId
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取userId
+        String userId = UserContext.getUserId();
         byte[] imageBytes = userService.getAvatar(userId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);

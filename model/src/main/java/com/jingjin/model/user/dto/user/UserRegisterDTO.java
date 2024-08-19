@@ -30,7 +30,7 @@ public class UserRegisterDTO implements Serializable {
      * 验证码
      */
     @NotNull(message = "缺少注册用户邮箱验证码")
-    private String verificationCode;
+    private String emailCode;
 
     /**
      * 串行版本uid

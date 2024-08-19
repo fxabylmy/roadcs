@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class JwtTokenUtil {
-
     /**
      * 过期时间
      */
@@ -43,33 +43,35 @@ public class JwtTokenUtil {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+
     /**
      * 生成令牌和刷新令牌
      *
      * @param userId  用户id
-     * @param account
+     * @param permissions 用户权限
      * @return {@link Map}<{@link String}, {@link Object}>
      */
-    public Map<String, Object> generateTokenAndRefreshToken(String userId, String account) {
+    public Map<String, Object> generateTokenAndRefreshToken(String userId, List<String> permissions) {
         //生成令牌及刷新令牌
-        Map<String, Object> tokenMap = buildToken(userId, account);
+        Map<String, Object> tokenMap = buildToken(userId, permissions);
         //redis缓存结果
         cacheToken(userId, tokenMap);
         return tokenMap;
     }
 
+
     /**
      * 构建令牌
      *
      * @param userId  用户id
-     * @param account 帐户
+     * @param permissions 用户权限
      * @return {@link Map}<{@link String}, {@link Object}>
-     */ //生成令牌
-    private Map<String, Object> buildToken(String userId, String account) {
+     */
+    private Map<String, Object> buildToken(String userId, List<String> permissions) {
         //生成token令牌
-        String accessToken = generateClaims(userId, account, null);
+        String accessToken = generateClaims(userId, permissions);
         //生成刷新令牌
-        String refreshToken = generateRefreshClaims(userId, account, null);
+        String refreshToken = generateRefreshClaims(userId, permissions);
         //存储两个令牌及过期时间，返回结果
         HashMap<String, Object> tokenMap = new HashMap<>(2);
         tokenMap.put(jwtProperties.getACCESS_TOKEN(), accessToken);
@@ -78,17 +80,16 @@ public class JwtTokenUtil {
         return tokenMap;
     }
 
+
     /**
      * 生成 token令牌声明
      *
-     * @param payloads 令牌中携带的附加信息
-     * @param userId   用户id
-     * @param account  帐户
+     * @param userId  用户id
+     * @param permissions 用户权限
      * @return 令牌
      */
-    public String generateClaims(String userId, String account,
-                                        Map<String, String> payloads) {
-        Map<String, Object> claims = buildClaims(userId, account, payloads);
+    public String generateClaims(String userId, List<String> permissions) {
+        Map<String, Object> claims = buildClaims(userId, permissions);
         return generateToken(claims);
     }
 
@@ -96,36 +97,29 @@ public class JwtTokenUtil {
      * 生成刷新令牌声明
      *
      * @param userId   用户id
-     * @param username 用户名
-     * @param payloads 有效载荷
+     * @param permissions 用户权限
      * @return {@link String}
      */
-    public String generateRefreshClaims(String userId, String username, Map<String, String> payloads) {
-        Map<String, Object> claims = buildClaims(userId, username, payloads);
+    public String generateRefreshClaims(String userId, List<String> permissions) {
+        Map<String, Object> claims = buildClaims(userId, permissions);
         return generateRefreshToken(claims);
     }
+
 
     /**
      * 构建map存储令牌需携带的信息
      *
      * @param userId   用户id
-     * @param username 用户名
-     * @param payloads 有效载荷
+     * @param permissions 用户权限
      * @return {@link Map}<{@link String}, {@link Object}>
      */
-    private Map<String, Object> buildClaims(String userId, String username, Map<String, String> payloads) {
-        int payloadSizes = payloads == null? 0 : payloads.size();
-
-        Map<String, Object> claims = new HashMap<>(payloadSizes + 2);
+    private Map<String, Object> buildClaims(String userId, List<String> permissions) {
+        Map<String, Object> claims = new HashMap<>();
         claims.put("sub", userId);
-        claims.put(jwtProperties.getUSER_NAME(), username);
         claims.put("created", new Date());
-        if(payloadSizes > 0){
-            claims.putAll(payloads);
-        }
+        claims.put("permissions", permissions);
         return claims;
     }
-
 
 
 
@@ -169,10 +163,8 @@ public class JwtTokenUtil {
     private void cacheToken(String userId, Map<String, Object> tokenMap) {
         stringRedisTemplate.opsForHash().put(jwtProperties.getJWT_CACHE_KEY() + userId, jwtProperties.getACCESS_TOKEN(), tokenMap.get(jwtProperties.getACCESS_TOKEN()));
         stringRedisTemplate.opsForHash().put(jwtProperties.getJWT_CACHE_KEY() + userId, jwtProperties.getREFRESH_TOKEN(), tokenMap.get(jwtProperties.getREFRESH_TOKEN()));
-        stringRedisTemplate.expire(userId, jwtProperties.getExpire() * 2, TimeUnit.MILLISECONDS);
+//        stringRedisTemplate.expire(userId, jwtProperties.getExpire() * 2, TimeUnit.MILLISECONDS);
     }
-
-
 
 
     /**
@@ -200,10 +192,32 @@ public class JwtTokenUtil {
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     public Map<String, Object> refreshTokenAndGenerateToken(String userId, String username) {
-        Map<String, Object> tokenMap = buildToken(userId, username);
+        // 假设你有一个方法来获取用户权限
+        List<String> permissions = getUserPermissionsFromToken(userId);
+
+        // 调用 buildToken 传递两个参数
+        Map<String, Object> tokenMap = buildToken(userId, permissions);
+
         stringRedisTemplate.delete(jwtProperties.getJWT_CACHE_KEY() + userId);
         cacheToken(userId, tokenMap);
         return tokenMap;
+    }
+
+    /**
+     * 从令牌中获取用户权限
+     *
+     * @param token 令牌
+     * @return 用户权限
+     */
+    public List<String> getUserPermissionsFromToken(String token) {
+        List<String> permissions;
+        try {
+            Claims claims = getClaimsFromToken(token);
+            permissions = (List<String>) claims.get("permissions");
+        } catch (Exception e) {
+            permissions = null;
+        }
+        return permissions;
     }
 
 
@@ -312,20 +326,5 @@ public class JwtTokenUtil {
         String userIdByToken = getUserIdFromToken(token);
         return (userIdByToken.equals(userId) && !isTokenExpired(token));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

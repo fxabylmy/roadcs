@@ -4,6 +4,7 @@ import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.PageResponse;
 import com.jingjin.common.result.ResultUtil;
+import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.userInteraction.dto.AddUserOpinionDTO;
 import com.jingjin.model.userInteraction.dto.OpinionResponseDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserOpinionDTO;
@@ -48,9 +49,9 @@ public class UserOpinionController {
     @Operation(summary = "新增用户意见")
     @PostMapping ("/add")
     @Transactional
-    public BaseResult<String> addUserOpinion(@RequestBody AddUserOpinionDTO addUserOpinionDTO){
-        //todo 从token获取当前用户id
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+    public BaseResult<String> addUserOpinion(AddUserOpinionDTO addUserOpinionDTO){
+        // 从token获取当前用户id
+        String userId = UserContext.getUserId();
         UserOpinion userOpinion = UserOpinion.builder()
                 .userId(userId)
                 .title(addUserOpinionDTO.getTitle())
@@ -70,8 +71,8 @@ public class UserOpinionController {
     @Transactional
     public BaseResult<PageResponse<UserOpinionVO>> getUserOpinion(@RequestParam(defaultValue = "1") int pageIndex,
                                                                   @RequestParam(defaultValue = "10") int pageSize){
-        //todo 从token获取当前用户id
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取当前用户id
+        String userId = UserContext.getUserId();
         PageResponse<UserOpinionVO> userOpinionPageVO = userOpinionService.getPageById(userId,pageIndex,pageSize);
         return ResultUtil.success(userOpinionPageVO);
     }
@@ -99,7 +100,7 @@ public class UserOpinionController {
     @Operation(summary = "用户修改用户意见")
     @PutMapping("/update")
     @Transactional
-    public BaseResult<String> updateUserOpinion(@RequestBody UpdateUserOpinionDTO updateUserOpinionDTO){
+    public BaseResult<String> updateUserOpinion(UpdateUserOpinionDTO updateUserOpinionDTO){
         //todo 修改用户意见
         return null;
     }

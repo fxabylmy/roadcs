@@ -4,6 +4,7 @@ import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.PageResponse;
 import com.jingjin.common.result.ResultUtil;
+import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.userInteraction.dto.AddUserMemoDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserMemoDTO;
 import com.jingjin.model.userInteraction.po.UserMemo;
@@ -45,9 +46,9 @@ public class UserMemoController {
     @Operation(summary = "新增用户备忘录")
     @PostMapping ("/add")
     @Transactional
-    public BaseResult<String> addUserMemo(@RequestBody AddUserMemoDTO addUserMemoDTO){
-        //todo 从token获取当前用户id
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+    public BaseResult<String> addUserMemo(AddUserMemoDTO addUserMemoDTO){
+        // 从token获取当前用户id
+        String userId = UserContext.getUserId();
         UserMemo userMemo = UserMemo.builder()
                 .userId(userId)
                 .title(addUserMemoDTO.getTitle())
@@ -63,8 +64,8 @@ public class UserMemoController {
     @Transactional
     public BaseResult<PageResponse<UserMemoVO>> getUserMemo(@RequestParam(defaultValue = "1") int pageIndex,
                                                             @RequestParam(defaultValue = "10") int pageSize){
-        //todo 从token获取当前用户id
-        String userId = "bc4444cd8c686efd581469d4313b9123";
+        // 从token获取当前用户id
+        String userId = UserContext.getUserId();
         PageResponse<UserMemoVO> userMemoPageVO = userMemoService.getPageById(pageIndex,pageSize,userId);
         return ResultUtil.success(userMemoPageVO);
     }
@@ -78,7 +79,7 @@ public class UserMemoController {
     @Operation(summary = "修改用户备忘录")
     @PutMapping("/update")
     @Transactional
-    public BaseResult<String> updateUserMemo(@RequestBody UpdateUserMemoDTO updateUserMemoDTO){
+    public BaseResult<String> updateUserMemo(UpdateUserMemoDTO updateUserMemoDTO){
         UserMemo userMemo = UserMemo.builder()
                 .id(updateUserMemoDTO.getId())
                 .title(updateUserMemoDTO.getTitle())

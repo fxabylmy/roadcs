@@ -53,4 +53,5 @@ public class ResultUtil {
     public static <T> BaseResult<T> error(ErrorCode errorCode) {
         return new BaseResult<>(errorCode.getCode(),errorCode.getMessage());
     }
+
 }
