@@ -1,4 +1,4 @@
-package com.jingjin.userwebsiteservice.mapper;
+package com.jingjin.userservice.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jingjin.model.userInteraction.po.UserMemo;

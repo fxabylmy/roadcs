@@ -1,4 +1,4 @@
-package com.jingjin.userwebsiteservice.service.impl;
+package com.jingjin.userservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -8,9 +8,9 @@ import com.jingjin.common.result.PageResponse;
 import com.jingjin.common.result.PageUtil;
 import com.jingjin.model.userInteraction.po.UserMemo;
 import com.jingjin.model.userInteraction.vo.UserMemoVO;
-import com.jingjin.userwebsiteservice.mapper.UserMemoMapper;
-import com.jingjin.userwebsiteservice.service.UserMemoService;
-import com.jingjin.userwebsiteservice.util.converter.UserMemoConverter;
+import com.jingjin.userservice.mapper.UserMemoMapper;
+import com.jingjin.userservice.service.UserMemoService;
+import com.jingjin.userservice.util.converter.UserMemoConverter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

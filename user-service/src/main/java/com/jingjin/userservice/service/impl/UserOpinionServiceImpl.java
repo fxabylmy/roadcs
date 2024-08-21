@@ -1,4 +1,4 @@
-package com.jingjin.userwebsiteservice.service.impl;
+package com.jingjin.userservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -6,14 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jingjin.common.result.PageResponse;
 import com.jingjin.common.result.PageUtil;
-import com.jingjin.model.thirdPartyWebsite.po.ThirdPartyWebsite;
-import com.jingjin.model.thirdPartyWebsite.vo.ThirdPartyWebsiteSimpleVO;
 import com.jingjin.model.userInteraction.po.UserOpinion;
 import com.jingjin.model.userInteraction.vo.UserOpinionVO;
 import com.jingjin.serviceClient.service.user.UserFeignClient;
-import com.jingjin.userwebsiteservice.mapper.UserOpinionMapper;
-import com.jingjin.userwebsiteservice.service.UserOpinionService;
-import com.jingjin.userwebsiteservice.util.converter.UserOpinionConverter;
+import com.jingjin.userservice.mapper.UserOpinionMapper;
+import com.jingjin.userservice.service.UserOpinionService;
+import com.jingjin.userservice.util.converter.UserOpinionConverter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

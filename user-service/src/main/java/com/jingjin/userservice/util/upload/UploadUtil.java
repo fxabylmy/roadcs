@@ -1,4 +1,4 @@
-package com.jingjin.userservice.util;
+package com.jingjin.userservice.util.upload;
 
 import cn.hutool.core.util.IdUtil;
 import com.aliyun.oss.OSS;
@@ -81,7 +81,7 @@ public class UploadUtil {
                     file.getInputStream()
             );
         } catch (IOException e) {
-            throw new BusinessException(ErrorCode.PICTURE_UPLOAD_ERROR);
+            throw new BusinessException(ErrorCode.PICTURE_MISSION);
         }
         ossClient.shutdown();
         return ALI_DOMAIN + fileName;

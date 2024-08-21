@@ -19,7 +19,7 @@ import com.jingjin.userservice.mapper.RolePermissionMapper;
 import com.jingjin.userservice.mapper.UserMapper;
 import com.jingjin.userservice.mapper.UserRoleMapper;
 import com.jingjin.userservice.service.UserService;
-import com.jingjin.userservice.util.UploadUtil;
+import com.jingjin.userservice.util.upload.UploadUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-package com.jingjin.userwebsiteservice.controller;
+package com.jingjin.userservice.controller;
 
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
@@ -9,7 +9,7 @@ import com.jingjin.model.userInteraction.dto.AddUserMemoDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserMemoDTO;
 import com.jingjin.model.userInteraction.po.UserMemo;
 import com.jingjin.model.userInteraction.vo.UserMemoVO;
-import com.jingjin.userwebsiteservice.service.UserMemoService;
+import com.jingjin.userservice.service.UserMemoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RefreshScope // 自动配置更新
 @RestController
-@RequestMapping("/memo")
+@RequestMapping("/interaction/memo")
 @Slf4j
 @Tag(name = "用户备忘录接口文档", description = "用户备忘录模块接口文档")
 public class UserMemoController {

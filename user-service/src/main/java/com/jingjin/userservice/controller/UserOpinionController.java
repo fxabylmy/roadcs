@@ -1,4 +1,4 @@
-package com.jingjin.userwebsiteservice.controller;
+package com.jingjin.userservice.controller;
 
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
@@ -11,7 +11,7 @@ import com.jingjin.model.userInteraction.dto.UpdateUserOpinionDTO;
 import com.jingjin.model.userInteraction.po.UserOpinion;
 import com.jingjin.model.userInteraction.vo.BackUserOpinionPageVO;
 import com.jingjin.model.userInteraction.vo.UserOpinionVO;
-import com.jingjin.userwebsiteservice.service.UserOpinionService;
+import com.jingjin.userservice.service.UserOpinionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RefreshScope // 自动配置更新
 @RestController
-@RequestMapping("/opinion")
+@RequestMapping("/interaction/opinion")
 @Slf4j
 @Tag(name = "用户意见接口文档", description = "用户意见模块接口文档")
 public class UserOpinionController {

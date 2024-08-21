@@ -1,4 +1,4 @@
-package com.jingjin.userwebsiteservice.util.converter;
+package com.jingjin.userservice.util.converter;
 
 import com.jingjin.model.userInteraction.po.UserMemo;
 import com.jingjin.model.userInteraction.vo.UserMemoVO;

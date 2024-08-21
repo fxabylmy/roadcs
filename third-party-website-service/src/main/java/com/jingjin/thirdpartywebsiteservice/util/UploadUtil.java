@@ -81,7 +81,7 @@ public class UploadUtil {
                     file.getInputStream()
             );
         } catch (IOException e) {
-            throw new BusinessException(ErrorCode.PICTURE_UPLOAD_ERROR);
+            throw new BusinessException(ErrorCode.PICTURE_MISSION);
         }
         ossClient.shutdown();
         return ALI_DOMAIN + fileName;

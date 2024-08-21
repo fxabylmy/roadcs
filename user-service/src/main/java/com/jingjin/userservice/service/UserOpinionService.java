@@ -1,4 +1,4 @@
-package com.jingjin.userwebsiteservice.service;
+package com.jingjin.userservice.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jingjin.common.result.PageResponse;

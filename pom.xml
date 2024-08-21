@@ -13,7 +13,6 @@
         <module>jwt-util</module>
         <module>model</module>
         <module>third-party-website-service</module>
-        <module>user-interaction-service</module>
         <module>admin-manage-service</module>
     </modules>
     <name>roadcs</name>

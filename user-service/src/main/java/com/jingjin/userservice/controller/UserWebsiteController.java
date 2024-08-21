@@ -1,11 +1,11 @@
-package com.jingjin.userwebsiteservice.controller;
+package com.jingjin.userservice.controller;
 
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.userInteraction.dto.AddUserWebsiteDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserWebsiteDTO;
 import com.jingjin.model.userInteraction.vo.UserWebsitePageVO;
-import com.jingjin.userwebsiteservice.service.UserWebsiteService;
+import com.jingjin.userservice.service.UserWebsiteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 @RefreshScope // 自动配置更新
 @RestController
-@RequestMapping("/website")
+@RequestMapping("/interaction/website")
 @Slf4j
 @Tag(name = "用户自定义网站接口文档", description = "用户自定义网站模块接口文档")
 public class UserWebsiteController {

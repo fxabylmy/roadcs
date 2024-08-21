@@ -1,9 +1,9 @@
-package com.jingjin.userwebsiteservice.service.impl;
+package com.jingjin.userservice.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jingjin.model.userInteraction.po.UserWebsite;
-import com.jingjin.userwebsiteservice.mapper.UserWebsiteMapper;
-import com.jingjin.userwebsiteservice.service.UserWebsiteService;
+import com.jingjin.userservice.mapper.UserWebsiteMapper;
+import com.jingjin.userservice.service.UserWebsiteService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
