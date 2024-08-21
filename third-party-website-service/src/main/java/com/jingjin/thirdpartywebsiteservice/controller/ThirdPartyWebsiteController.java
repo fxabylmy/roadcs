@@ -71,19 +71,6 @@ public class ThirdPartyWebsiteController {
         return ResultUtil.success(websiteDetailVO);
     }
 
-    /**
-     * 获取第三方网站logo
-     *
-     * @return {@link ResponseEntity}<{@link ByteArrayResource}>
-     * @throws IOException ioexception
-     */
-/*    @Operation(summary = "获取网站图标")
-    @GetMapping("/logo/get/{id}")
-    @Transactional
-    public ResponseEntity<ByteArrayResource> getThirdPartyWebsiteLogo(@PathVariable("id") Integer ThirdPartyWebsiteId) throws IOException {
-        //todo 获取网站图标
-        return null;
-    }*/
 
     /**
      * 添加第三方网站

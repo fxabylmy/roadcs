@@ -1,22 +1,23 @@
 package com.jingjin.userservice.controller;
 
+import com.jingjin.common.exception.ThrowUtils;
 import com.jingjin.common.result.BaseResult;
+import com.jingjin.common.result.ErrorCode;
+import com.jingjin.common.result.PageResponse;
+import com.jingjin.common.result.ResultUtil;
 import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.userInteraction.dto.AddUserWebsiteDTO;
 import com.jingjin.model.userInteraction.dto.UpdateUserWebsiteDTO;
-import com.jingjin.model.userInteraction.vo.UserWebsitePageVO;
+import com.jingjin.model.userInteraction.po.UserWebsite;
+import com.jingjin.model.userInteraction.vo.UserWebsiteVO;
 import com.jingjin.userservice.service.UserWebsiteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 /**
  * 用户自定义网站控制器
@@ -40,33 +41,19 @@ public class UserWebsiteController {
     /**
      * 根据token获取用户自定义网站列表
      *
-     * @return {@link BaseResult}<{@link UserWebsitePageVO}>
+     * @return {@link BaseResult}<{@link PageResponse}<{@link UserWebsiteVO}>>
      */
     @Operation(summary = "获取用户自定义网站列表")
     @GetMapping("/get/list")
     @Transactional
-    public BaseResult<UserWebsitePageVO> getAdminWebsiteDetail(){
+    public BaseResult<PageResponse<UserWebsiteVO>> getAdminWebsiteDetail(@RequestParam(defaultValue = "1") int pageIndex,
+                                                                         @RequestParam(defaultValue = "10") int pageSize){
         // 从token获取当前用户id
         String userId = UserContext.getUserId();
-        //todo 获取用户自定义网站列表
-        return null;
+        PageResponse<UserWebsiteVO> userWebsiteVOPage = userWebsiteService.getPageByUserId(userId,pageIndex,pageSize);
+        return ResultUtil.success(userWebsiteVOPage);
     }
 
-
-    /**
-     * 获取用户自定义网站logo
-     *
-     * @param userWebsiteId 用户网站id
-     * @return {@link ResponseEntity}<{@link ByteArrayResource}>
-     * @throws IOException ioexception
-     */
-   /* @Operation(summary = "获取网站图标")
-    @GetMapping("/logo/get/{id}")
-    @Transactional
-    public ResponseEntity<ByteArrayResource> getUserWebsiteLogo(@PathVariable("id") Integer userWebsiteId) throws IOException {
-        //todo 获取网站图标
-        return null;
-    }*/
 
     /**
      * 添加用户自定义网站
@@ -77,21 +64,9 @@ public class UserWebsiteController {
     @Operation(summary = "上传新用户自定义网站")
     @PostMapping("/add")
     public BaseResult<String> addUserWebsite(@RequestBody AddUserWebsiteDTO addUserWebsiteDTO){
-        //todo 添加新用户自定义网站
-        return null;
-    }
-
-    /**
-     * 删除用户自定义网站
-     *
-     * @param userWebsiteId 用户网站id
-     * @return {@link BaseResult}<{@link String}>
-     */
-    @Operation(summary = "删除用户自定义网站")
-    @DeleteMapping ("/delete/{id}")
-    public BaseResult<String> deleteUserWebsite(@PathVariable("id") Integer userWebsiteId){
-        //todo 删除用户自定义网站
-        return null;
+        String userId = UserContext.getUserId();
+        Boolean isSuccess = userWebsiteService.addUserWebsite(userId,addUserWebsiteDTO);
+        return isSuccess? ResultUtil.success("新增自定义网站成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
     /**
@@ -103,9 +78,30 @@ public class UserWebsiteController {
     @Operation(summary = "修改用户自定义网站")
     @PutMapping("/update")
     public BaseResult<String> updateAdminWebsite(UpdateUserWebsiteDTO updateUserWebsiteDTO){
-        //todo 修改用户自定义网站
-        return null;
+        String userId = UserContext.getUserId();
+        UserWebsite userWebsite = userWebsiteService.getById(updateUserWebsiteDTO.getId());
+        ThrowUtils.throwIf(!userId.equals(userWebsite.getUserId()),ErrorCode.PRTMISSION_ERROR);
+        Boolean isSuccess = userWebsiteService.updateUserWebsite(updateUserWebsiteDTO);
+        return isSuccess?ResultUtil.success("更新自定义网站成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
+
+    /**
+     * 删除用户自定义网站
+     *
+     * @param userWebsiteId 用户网站id
+     * @return {@link BaseResult}<{@link String}>
+     */
+    @Operation(summary = "删除用户自定义网站")
+    @DeleteMapping ("/delete/{id}")
+    public BaseResult<String> deleteUserWebsite(@PathVariable("id") Integer userWebsiteId){
+        String userId = UserContext.getUserId();
+        UserWebsite userWebsite = userWebsiteService.getById(userWebsiteId);
+        ThrowUtils.throwIf(!userId.equals(userWebsite.getUserId()),ErrorCode.PRTMISSION_ERROR);
+        Boolean isSuccess = userWebsiteService.removeById(userWebsiteId);
+        return isSuccess?ResultUtil.success("删除自定义网站成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
+    }
+
+
 
 
 }

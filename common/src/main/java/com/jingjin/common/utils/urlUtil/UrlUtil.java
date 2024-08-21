@@ -1,4 +1,4 @@
-package com.jingjin.thirdpartywebsiteservice.util.urlUtil;
+package com.jingjin.common.utils.urlUtil;
 
 import com.jingjin.common.exception.BusinessException;
 import com.jingjin.common.result.ErrorCode;

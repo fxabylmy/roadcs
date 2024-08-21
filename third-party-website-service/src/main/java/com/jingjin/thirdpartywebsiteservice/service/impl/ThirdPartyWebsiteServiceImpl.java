@@ -2,9 +2,6 @@ package com.jingjin.thirdpartywebsiteservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jingjin.common.exception.BusinessException;
-import com.jingjin.common.exception.ThrowUtils;
-import com.jingjin.common.result.ErrorCode;
 import com.jingjin.model.thirdPartyWebsite.dto.AddThirdPartyWebsiteDTO;
 import com.jingjin.model.thirdPartyWebsite.dto.UpdateThirdPartyWebsiteDTO;
 import com.jingjin.model.thirdPartyWebsite.vo.ThirdPartyWebsiteDetailVO;
@@ -18,14 +15,10 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
-import static com.jingjin.thirdpartywebsiteservice.util.urlUtil.UrlUtil.urlToBase64;
+import static com.jingjin.common.utils.urlUtil.UrlUtil.urlToBase64;
 
 /**
  * 第三方网站服务实施
