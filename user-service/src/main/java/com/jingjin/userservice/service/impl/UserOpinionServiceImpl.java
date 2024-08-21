@@ -6,11 +6,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jingjin.common.result.PageResponse;
 import com.jingjin.common.result.PageUtil;
+import com.jingjin.model.userInteraction.dto.OpinionResponseDTO;
 import com.jingjin.model.userInteraction.po.UserOpinion;
+import com.jingjin.model.userInteraction.vo.BackUserOpinionVO;
 import com.jingjin.model.userInteraction.vo.UserOpinionVO;
 import com.jingjin.serviceClient.service.user.UserFeignClient;
 import com.jingjin.userservice.mapper.UserOpinionMapper;
 import com.jingjin.userservice.service.UserOpinionService;
+import com.jingjin.userservice.service.UserService;
 import com.jingjin.userservice.util.converter.UserOpinionConverter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +30,7 @@ public class UserOpinionServiceImpl extends ServiceImpl<UserOpinionMapper, UserO
     private UserOpinionMapper userOpinionMapper;
 
     @Resource
-    private UserFeignClient userFeignClient;
+    private UserService userService;
 
     @Override
     public PageResponse<UserOpinionVO> getPageById(String userId, int pageIndex, int pageSize) {
@@ -42,11 +45,36 @@ public class UserOpinionServiceImpl extends ServiceImpl<UserOpinionMapper, UserO
         List<UserOpinionVO> userOpinionVOList = new ArrayList<>();
         userOpinionList.stream().forEach((UserOpinion userOpinion)->{
             UserOpinionVO userOpinionVO = UserOpinionConverter.INSTANCE.toUserOpinionVO(userOpinion);
-            String responseName = userFeignClient.getUserById(userOpinion.getResponseId()).getName();
+            String responseName = userService.getById(userOpinion.getResponseId()).getName();
             userOpinionVO.setResponseName(responseName);
             userOpinionVOList.add(userOpinionVO);
         });
         PageResponse<UserOpinionVO> pageResponse = PageUtil.setPage(resultPage,userOpinionVOList);
         return pageResponse;
     }
+
+    @Override
+    public PageResponse<BackUserOpinionVO> getPageBack(int pageIndex, int pageSize) {
+        IPage<UserOpinion> pageParams = new Page<>(pageIndex, pageSize);
+        LambdaQueryWrapper<UserOpinion> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserOpinion::getIsDelete,"0");
+        IPage<UserOpinion> resultPage =  page(pageParams,wrapper);
+        if(pageParams.getTotal()==0)
+            return PageUtil.isNull(new ArrayList<BackUserOpinionVO>());
+        List<UserOpinion> userOpinionList = resultPage.getRecords();
+        List<BackUserOpinionVO> backUserOpinionVOList = new ArrayList<>();
+        userOpinionList.stream().forEach((UserOpinion userOpinion)->{
+            BackUserOpinionVO backUserOpinionVO = UserOpinionConverter.INSTANCE.toBackUserOpinionVO(userOpinion);
+            String responseName = userService.getById(userOpinion.getResponseId()).getName();
+            backUserOpinionVO.setResponseName(responseName);
+            String userName = userService.getById(userOpinion.getUserId()).getName();
+            backUserOpinionVO.setUserName(userName);
+            backUserOpinionVOList.add(backUserOpinionVO);
+        });
+        PageResponse<BackUserOpinionVO> pageResponse = PageUtil.setPage(resultPage,backUserOpinionVOList);
+        return pageResponse;
+    }
+
+
+
 }

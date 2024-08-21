@@ -13,12 +13,14 @@ import com.jingjin.model.user.dto.user.UploadPasswordDTO;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.po.User;
 import com.jingjin.model.user.po.UserRole;
+import com.jingjin.model.user.vo.UserDetailVO;
 import com.jingjin.serviceClient.service.order.OrderFeignClient;
 import com.jingjin.userservice.mapper.PermissionMapper;
 import com.jingjin.userservice.mapper.RolePermissionMapper;
 import com.jingjin.userservice.mapper.UserMapper;
 import com.jingjin.userservice.mapper.UserRoleMapper;
 import com.jingjin.userservice.service.UserService;
+import com.jingjin.userservice.util.converter.UserConverter;
 import com.jingjin.userservice.util.upload.UploadUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -182,8 +184,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         }
         is.close();
         byte[] imageBytes = os.toByteArray();
-
-
         return imageBytes;
     }
 
@@ -239,6 +239,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         updateWrapper.eq("email", email).set("password", digestNewPassword);
         int update = userMapper.update(null, updateWrapper);
         return update > 0;
+    }
+
+    @Override
+    public Boolean uploadBackground(MultipartFile background, String userId) {
+        String backgroundUrl = uploadUtil.uploadImg(background);
+        User user = User.builder().id(userId).backgroundUrl(backgroundUrl).build();
+        Boolean isSuccess = updateById(user);
+        return isSuccess;
+    }
+
+    @Override
+    public byte[] getBackground(String userId) throws IOException {
+        String backgroundUrl = getById(userId).getAvatarUrl();
+        throwIf(StringUtils.isEmpty(backgroundUrl),SYSTEM_ERROR);
+        URL url = new URL(backgroundUrl);
+        InputStream is = url.openStream();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = is.read(buffer)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+        is.close();
+        byte[] imageBytes = os.toByteArray();
+        return imageBytes;
+    }
+
+    @Override
+    public UserDetailVO getUserDetail(String userId) {
+        User user = getById(userId);
+        UserDetailVO userDetailVO = UserConverter.INSTANCE.toUserDetailVO(user);
+        return userDetailVO;
     }
 
 

@@ -1,5 +1,6 @@
 package com.jingjin.userservice.controller;
 
+import com.jingjin.common.exception.ThrowUtils;
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.PageResponse;
@@ -80,11 +81,11 @@ public class UserMemoController {
     @PutMapping("/update")
     @Transactional
     public BaseResult<String> updateUserMemo(UpdateUserMemoDTO updateUserMemoDTO){
-        UserMemo userMemo = UserMemo.builder()
-                .id(updateUserMemoDTO.getId())
-                .title(updateUserMemoDTO.getTitle())
-                .content(updateUserMemoDTO.getContent())
-                .build();
+        UserMemo userMemo = userMemoService.getById(updateUserMemoDTO.getId());
+        String userId = UserContext.getUserId();
+        ThrowUtils.throwIf(!userId.equals(userMemo.getUserId()),ErrorCode.PRTMISSION_ERROR);
+        userMemo.setTitle(updateUserMemoDTO.getTitle());
+        userMemo.setContent(updateUserMemoDTO.getContent());
         Boolean isSuccess = userMemoService.updateById(userMemo);
         return isSuccess? ResultUtil.success("修改备忘录成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
@@ -99,9 +100,11 @@ public class UserMemoController {
     @DeleteMapping ("/delete/{id}")
     @Transactional
     public BaseResult<String> deleteUserMemo(@PathVariable("id") Integer userMemoId){
+        UserMemo userMemo = userMemoService.getById(userMemoId);
+        String userId = UserContext.getUserId();
+        ThrowUtils.throwIf(!userId.equals(userMemo.getUserId()),ErrorCode.PRTMISSION_ERROR);
         Boolean isSuccess = userMemoService.removeById(userMemoId);
         return isSuccess? ResultUtil.success("删除备忘录成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
-
     }
 
 

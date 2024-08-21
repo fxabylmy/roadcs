@@ -41,6 +41,11 @@ public class BackUserOpinionVO implements Serializable {
     private String responseId;
 
     /**
+     * 回复者姓名
+     */
+    private String responseName;
+
+    /**
      * 回复内容
      */
     private String responseContent;

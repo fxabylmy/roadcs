@@ -173,24 +173,33 @@ public class UserController {
     @PutMapping("/background/upload")
     @Transactional
     public BaseResult<String> uploadBackground(UploadBackgroundDTO uploadBackgroundDTO) throws Exception {
-        //todo  用户更改背景
-        return ResultUtil.success("背景上传成功");
+        String userId = UserContext.getUserId();
+        Boolean isSuccess = userService.uploadBackground(uploadBackgroundDTO.getBackground(),userId);
+        return isSuccess?ResultUtil.success("背景上传成功"):ResultUtil.error(SYSTEM_ERROR);
     }
 
     @Operation(summary = "用户获取背景")
     @GetMapping("/background/get")
     @Transactional
     public ResponseEntity<ByteArrayResource> getBackground() throws IOException {
-        //todo  用户获取背景
-        return null;
+        // 从token获取userId
+        String userId = UserContext.getUserId();
+        byte[] imageBytes = userService.getBackground(userId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        ByteArrayResource avatar = new ByteArrayResource(imageBytes);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(imageBytes.length)
+                .body(avatar);
     }
 
     @Operation(summary = "获取用户详情")
     @GetMapping("/user/get")
     @Transactional
     public BaseResult<UserDetailVO> getUserDetail() throws IOException {
-        //todo  获取用户详情
-        UserDetailVO userDetailVO = new UserDetailVO();
+        String userId = UserContext.getUserId();
+        UserDetailVO userDetailVO = userService.getUserDetail(userId);
         return ResultUtil.success(userDetailVO);
     }
 

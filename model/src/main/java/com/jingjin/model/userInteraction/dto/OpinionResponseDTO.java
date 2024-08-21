@@ -18,8 +18,6 @@ public class OpinionResponseDTO implements Serializable {
      */
     private Integer id;
 
-
-
     /**
      * 回复内容
      */

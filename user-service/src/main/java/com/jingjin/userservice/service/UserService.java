@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.jingjin.model.user.dto.user.UploadPasswordDTO;
 import com.jingjin.model.user.dto.user.UserRegisterDTO;
 import com.jingjin.model.user.po.User;
+import com.jingjin.model.user.vo.UserDetailVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,4 +31,10 @@ public interface UserService extends IService<User> {
     Boolean confirmEmail(String email, String emailCode);
 
     Boolean passwordReWrite(UploadPasswordDTO uploadPasswordDTO);
+
+    Boolean uploadBackground(MultipartFile background, String userId);
+
+    byte[] getBackground(String userId) throws IOException;
+
+    UserDetailVO getUserDetail(String userId);
 }
