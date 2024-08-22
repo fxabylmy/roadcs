@@ -32,27 +32,31 @@ public final class JavaMailUtils {
         Transport.send(message);
         return true;
     }
-    public static Session createSession(){
-        //邮箱账号信息
+
+    public static Session createSession() {
+        // 邮箱账号信息
         String userName = "1282431096@qq.com";
         String passWord = "aebwfdrxzhlbffee";
 
-        //SMTP服务器连接信息
+        // SMTP服务器连接信息
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.qq.com");
-        props.put("mail.smtp.port", "25"); // 使用SSL加密
+        props.put("mail.smtp.port", "465");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.password", "aebwfdrxzhlbffee"); // 的授权码
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.socketFactory.fallback", "false");
+        props.put("mail.smtp.ssl.enable", "true"); // 启用 SSL
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
-        //创建Session会话
-        //参数1：smtp服务器连接参数
-        //参数2：账号密码的授权认证对象
+        // 创建Session会话
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(userName,passWord);
+                return new PasswordAuthentication(userName, passWord);
             }
         });
+
         return session;
     }
 }
