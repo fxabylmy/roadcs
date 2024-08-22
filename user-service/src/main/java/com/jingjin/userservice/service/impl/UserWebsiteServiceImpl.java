@@ -61,7 +61,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
                 .logoUrl(logoUrl)
                 .subtitle(updateUserWebsiteDTO.getSubtitle())
                 .build();
-        Boolean isSuccess = save(userWebsite);
+        Boolean isSuccess = updateById(userWebsite);
         return isSuccess;
     }
 

@@ -63,7 +63,7 @@ public class UserWebsiteController {
      */
     @Operation(summary = "上传新用户自定义网站")
     @PostMapping("/add")
-    public BaseResult<String> addUserWebsite(@RequestBody AddUserWebsiteDTO addUserWebsiteDTO){
+    public BaseResult<String> addUserWebsite(AddUserWebsiteDTO addUserWebsiteDTO){
         String userId = UserContext.getUserId();
         Boolean isSuccess = userWebsiteService.addUserWebsite(userId,addUserWebsiteDTO);
         return isSuccess? ResultUtil.success("新增自定义网站成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
