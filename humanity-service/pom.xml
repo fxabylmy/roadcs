@@ -59,7 +59,25 @@
             </exclusions>
         </dependency>
 
+        <!--  阿里云模型服务灵积 DashScope     -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dashscope-sdk-java</artifactId>
+            <version>2.12.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
+        <!-- 响应式编程 Reactor Core -->
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>3.4.6</version>
+        </dependency>
 
         <!-- knife4j -->
         <dependency>
