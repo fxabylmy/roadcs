@@ -140,7 +140,7 @@ public class UserOpinionController {
      * @return {@link BaseResult}<{@link String}>
      */
     @Operation(summary = "回应用户意见")
-    @DeleteMapping ("/response")
+    @PostMapping ("/response")
     @Transactional
     public BaseResult<String> respondUserOpinion(@RequestBody OpinionResponseDTO opinionResponseDTO){
         String userId = UserContext.getUserId();

@@ -18,6 +18,7 @@ import com.jingjin.userservice.util.converter.UserOpinionConverter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +46,10 @@ public class UserOpinionServiceImpl extends ServiceImpl<UserOpinionMapper, UserO
         List<UserOpinionVO> userOpinionVOList = new ArrayList<>();
         userOpinionList.stream().forEach((UserOpinion userOpinion)->{
             UserOpinionVO userOpinionVO = UserOpinionConverter.INSTANCE.toUserOpinionVO(userOpinion);
-            String responseName = userService.getById(userOpinion.getResponseId()).getName();
-            userOpinionVO.setResponseName(responseName);
+            if (StringUtils.hasText(userOpinion.getResponseId())){
+                String responseName = userService.getById(userOpinion.getResponseId()).getName();
+                userOpinionVO.setResponseName(responseName);
+            }
             userOpinionVOList.add(userOpinionVO);
         });
         PageResponse<UserOpinionVO> pageResponse = PageUtil.setPage(resultPage,userOpinionVOList);
@@ -65,8 +68,10 @@ public class UserOpinionServiceImpl extends ServiceImpl<UserOpinionMapper, UserO
         List<BackUserOpinionVO> backUserOpinionVOList = new ArrayList<>();
         userOpinionList.stream().forEach((UserOpinion userOpinion)->{
             BackUserOpinionVO backUserOpinionVO = UserOpinionConverter.INSTANCE.toBackUserOpinionVO(userOpinion);
-            String responseName = userService.getById(userOpinion.getResponseId()).getName();
-            backUserOpinionVO.setResponseName(responseName);
+            if (StringUtils.hasText(userOpinion.getResponseId())){
+                String responseName = userService.getById(userOpinion.getResponseId()).getName();
+                backUserOpinionVO.setResponseName(responseName);
+            }
             String userName = userService.getById(userOpinion.getUserId()).getName();
             backUserOpinionVO.setUserName(userName);
             backUserOpinionVOList.add(backUserOpinionVO);

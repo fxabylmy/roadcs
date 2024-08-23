@@ -187,11 +187,11 @@ public class UserController {
         byte[] imageBytes = userService.getBackground(userId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
-        ByteArrayResource avatar = new ByteArrayResource(imageBytes);
+        ByteArrayResource background = new ByteArrayResource(imageBytes);
         return ResponseEntity.ok()
                 .headers(headers)
                 .contentLength(imageBytes.length)
-                .body(avatar);
+                .body(background);
     }
 
     @Operation(summary = "获取用户详情")

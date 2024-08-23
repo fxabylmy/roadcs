@@ -251,7 +251,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
     @Override
     public byte[] getBackground(String userId) throws IOException {
-        String backgroundUrl = getById(userId).getAvatarUrl();
+        String backgroundUrl = getById(userId).getBackgroundUrl();
         throwIf(StringUtils.isEmpty(backgroundUrl),SYSTEM_ERROR);
         URL url = new URL(backgroundUrl);
         InputStream is = url.openStream();
