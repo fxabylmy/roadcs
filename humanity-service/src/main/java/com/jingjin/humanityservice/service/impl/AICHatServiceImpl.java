@@ -13,10 +13,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jingjin.humanityservice.mapper.ChatMessageMapper;
 import com.jingjin.humanityservice.mapper.ChatSessionMapper;
 import com.jingjin.humanityservice.service.AIChatService;
-import com.jingjin.model.humanity.dto.AIAskDTO;
+import com.jingjin.humanityservice.util.ChatUtil;
+import com.jingjin.humanityservice.util.converter.ChatMessageConverter;
+import com.jingjin.humanityservice.util.converter.ChatSessionConverter;
 import com.jingjin.model.humanity.po.ChatMessage;
 import com.jingjin.model.humanity.po.ChatSession;
-import com.jingjin.model.thirdPartyWebsite.po.UserFavorites;
+import com.jingjin.model.humanity.vo.ChatMessageSimpleVO;
+import com.jingjin.model.humanity.vo.ChatSessionSimpleVO;
+import com.jingjin.model.thirdPartyWebsite.po.ThirdPartyWebsite;
 import io.reactivex.Flowable;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +34,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.jingjin.humanityservice.util.ChatUtil.createGenerationParam;
-import static com.jingjin.humanityservice.util.ChatUtil.createMessage;
 
 /**
  * aichat服务实施
@@ -55,15 +57,18 @@ public class AICHatServiceImpl extends ServiceImpl<ChatSessionMapper, ChatSessio
     @Resource
     private ChatMessageMapper chatMessageMapper;
 
+    @Resource
+    private ChatUtil chatUtil;
+
 
     @Override
     public Flux<ServerSentEvent<String>> streamNewAsk(String userId, String question) throws Exception {
         Generation gen = new Generation();
         List<String> responseData = new ArrayList<>();
         List<Message> messages = new ArrayList<>();
-        messages.add(createMessage(Role.SYSTEM, "You are a helpful assistant."));
-        messages.add(createMessage(Role.USER,question));
-        GenerationParam param = createGenerationParam(messages);
+        messages.add(chatUtil.createMessage(Role.SYSTEM, "You are a helpful assistant."));
+        messages.add(chatUtil.createMessage(Role.USER,question));
+        GenerationParam param = chatUtil.createGenerationParam(messages);
         // 调用生成接口，获取Flowable对象
         Flowable<GenerationResult> result = gen.streamCall(param);
         // 将Flowable转换成Flux<ServerSentEvent<String>>并进行处理
@@ -80,7 +85,7 @@ public class AICHatServiceImpl extends ServiceImpl<ChatSessionMapper, ChatSessio
                 .concatWith(Flux.just(ServerSentEvent.<String>builder().comment("").build()))
                 .doOnComplete(()-> {
                     String combinedResult = String.join("",responseData);
-                    ChatSession chatSession = ChatSession.builder().userId(userId).build();
+                    ChatSession chatSession = ChatSession.builder().userId(userId).name("为你的对话取个名字吧！").build();
                     chatSessionMapper.insert(chatSession);
                     ChatMessage ackMessage = ChatMessage.builder()
                             .sessionId(chatSession.getId())
@@ -113,7 +118,7 @@ public class AICHatServiceImpl extends ServiceImpl<ChatSessionMapper, ChatSessio
         Generation gen = new Generation();
         List<String> responseData = new ArrayList<>();
         List<Message> messages = new ArrayList<>();
-        messages.add(createMessage(Role.SYSTEM, "You are a helpful assistant."));
+        messages.add(chatUtil.createMessage(Role.SYSTEM, "You are a helpful assistant."));
         //从数据库查询历史对话
         LambdaQueryWrapper<ChatMessage> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ChatMessage::getSessionId,chatSessionId)
@@ -125,13 +130,13 @@ public class AICHatServiceImpl extends ServiceImpl<ChatSessionMapper, ChatSessio
                 .collect(Collectors.toList());
         messageOrderList.stream().forEach((ChatMessage chatMessage)->{
             if (chatMessage.getSenderType()==1){
-                messages.add(createMessage(Role.USER,chatMessage.getMessage()));
+                messages.add(chatUtil.createMessage(Role.USER,chatMessage.getMessage()));
             }else {
-                messages.add(createMessage(Role.ASSISTANT,chatMessage.getMessage()));
+                messages.add(chatUtil.createMessage(Role.ASSISTANT,chatMessage.getMessage()));
             }
         });
-        messages.add(createMessage(Role.USER,question));
-        GenerationParam param = createGenerationParam(messages);
+        messages.add(chatUtil.createMessage(Role.USER,question));
+        GenerationParam param = chatUtil.createGenerationParam(messages);
         // 调用生成接口，获取Flowable对象
         Flowable<GenerationResult> result = gen.streamCall(param);
         // 将Flowable转换成Flux<ServerSentEvent<String>>并进行处理
@@ -172,5 +177,38 @@ public class AICHatServiceImpl extends ServiceImpl<ChatSessionMapper, ChatSessio
                         // 处理其他异常
                     }
                 });
+    }
+
+    @Override
+    public List<ChatSessionSimpleVO> getAll(String userId) {
+        LambdaQueryWrapper<ChatSession> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ChatSession::getIsDelete,"0")
+                .eq(ChatSession::getUserId,userId);
+        List<ChatSession> list =list(wrapper);
+        List<ChatSessionSimpleVO> sessionSimpleVOList = ChatSessionConverter.INSTANCE.toChatSessionSimpleVOList(list);
+        return sessionSimpleVOList;
+    }
+
+    @Override
+    public List<ChatMessageSimpleVO> getMessage(Integer chatSessionId) {
+        LambdaQueryWrapper<ChatMessage> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ChatMessage::getIsDelete,"0")
+                .eq(ChatMessage::getSessionId,chatSessionId);
+        List<ChatMessage> list =chatMessageMapper.selectList(wrapper);
+        List<ChatMessageSimpleVO> messageSimpleVOList = ChatMessageConverter.INSTANCE.toChatMessageSimpleVOList(list);
+        return messageSimpleVOList;
+    }
+
+    @Override
+    public Boolean removeSessionById(Integer chatSessionId) {
+        removeById(chatSessionId);
+        LambdaQueryWrapper<ChatMessage> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ChatMessage::getIsDelete,"0")
+                .eq(ChatMessage::getSessionId,chatSessionId);
+        int result = chatMessageMapper.delete(wrapper);
+        if (result>0) {
+            return true;
+        }
+        return false;
     }
 }

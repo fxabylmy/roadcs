@@ -4,6 +4,10 @@ package com.jingjin.humanityservice.util;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.common.Message;
 import com.alibaba.dashscope.common.Role;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,13 +17,17 @@ import java.util.List;
  * @author fxab
  * @date 2024/07/08
  */
+@Component
+@RefreshScope
+@Slf4j
 public class ChatUtil {
 
 
     /**
      * api密钥
      */
-    private static String apiKey = "sk-8eab192b1a6647c5bff81b0fc0faeacb";
+    @Value("${aliyun.chat.access-key:''}")
+    public String ApiKey;
 
     /**
      * 创建消息
@@ -38,7 +46,7 @@ public class ChatUtil {
      * @param messages 消息
      * @return {@link GenerationParam}
      */
-    public static GenerationParam createGenerationParam(List<Message> messages) {
+    public GenerationParam createGenerationParam(List<Message> messages) {
         return GenerationParam.builder()
                 //选用模型
                 .model("qwen-long")
@@ -53,7 +61,7 @@ public class ChatUtil {
                 //限制回答的最大token数，1token=1.5汉字
                 .maxTokens(200)
                 //api密钥
-                .apiKey(apiKey)
+                .apiKey(ApiKey)
                 //控制在流式输出模式下是否开启增量输出
                 .incrementalOutput(true)
                 .build();
