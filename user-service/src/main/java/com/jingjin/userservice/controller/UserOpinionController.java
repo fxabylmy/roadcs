@@ -51,16 +51,17 @@ public class UserOpinionController {
     @Operation(summary = "新增用户意见")
     @PostMapping ("/add")
     @Transactional
-    public BaseResult<String> addUserOpinion(AddUserOpinionDTO addUserOpinionDTO){
+    public BaseResult<Integer> addUserOpinion(AddUserOpinionDTO addUserOpinionDTO){
         // 从token获取当前用户id
         String userId = UserContext.getUserId();
         UserOpinion userOpinion = UserOpinion.builder()
                 .userId(userId)
                 .title(addUserOpinionDTO.getTitle())
                 .content(addUserOpinionDTO.getContent())
+                .status(1)
                 .build();
         Boolean isSuccess = userOpinionService.save(userOpinion);
-        return isSuccess? ResultUtil.success("新增用户意见成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
+        return isSuccess? ResultUtil.success(userOpinion.getId()):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
     /**
@@ -76,6 +77,7 @@ public class UserOpinionController {
         UserOpinion userOpinion = userOpinionService.getById(updateUserOpinionDTO.getId());
         String userId = UserContext.getUserId();
         ThrowUtils.throwIf(!userId.equals(userOpinion.getUserId()),ErrorCode.PRTMISSION_ERROR);
+        ThrowUtils.throwIf(2==(userOpinion.getStatus()),ErrorCode.PRTMISSION_ERROR);
         userOpinion.setTitle(updateUserOpinionDTO.getTitle());
         userOpinion.setContent(updateUserOpinionDTO.getContent());
         Boolean isSuccess = userOpinionService.updateById(userOpinion);
@@ -95,6 +97,7 @@ public class UserOpinionController {
         UserOpinion userOpinion = userOpinionService.getById(userOpinionId);
         String userId = UserContext.getUserId();
         ThrowUtils.throwIf(!userId.equals(userOpinion.getUserId()),ErrorCode.PRTMISSION_ERROR);
+        ThrowUtils.throwIf(2==(userOpinion.getStatus()),ErrorCode.PRTMISSION_ERROR);
         Boolean isSuccess = userOpinionService.removeById(userOpinionId);
         return isSuccess? ResultUtil.success("删除意见成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
 
@@ -148,6 +151,7 @@ public class UserOpinionController {
                 .id(opinionResponseDTO.getId())
                 .responseId(userId)
                 .responseContent(opinionResponseDTO.getResponseContent())
+                .status(2)
                 .build();
         Boolean isSuccess = userOpinionService.updateById(userOpinion);
         return isSuccess? ResultUtil.success("回应用户意见成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);

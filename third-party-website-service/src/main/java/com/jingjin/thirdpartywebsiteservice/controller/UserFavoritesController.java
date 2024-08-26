@@ -45,7 +45,7 @@ public class UserFavoritesController {
      *
      * @return {@link BaseResult}<{@link ThirdPartyWebsitePageVO}>
      */
-    @Operation(summary = "获取第三方网站列表")
+    @Operation(summary = "获取第三方网站收藏列表")
     @GetMapping("/get/list")
     @Transactional
     public BaseResult<List<ThirdPartyWebsiteSimpleVO>> getAdminWebsiteDetail(){

@@ -40,6 +40,11 @@ public class UserOpinionVO implements Serializable {
     private String responseContent;
 
     /**
+     * 状态
+     */
+    private Integer status;
+
+    /**
      * 串行版本uid
      */
     @TableField(exist = false)

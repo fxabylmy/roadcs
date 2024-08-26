@@ -47,7 +47,7 @@ public class UserMemoController {
     @Operation(summary = "新增用户备忘录")
     @PostMapping ("/add")
     @Transactional
-    public BaseResult<String> addUserMemo(AddUserMemoDTO addUserMemoDTO){
+    public BaseResult<Integer> addUserMemo(AddUserMemoDTO addUserMemoDTO){
         // 从token获取当前用户id
         String userId = UserContext.getUserId();
         UserMemo userMemo = UserMemo.builder()
@@ -56,7 +56,7 @@ public class UserMemoController {
                 .content(addUserMemoDTO.getContent())
                 .build();
         Boolean isSuccess = userMemoService.save(userMemo);
-        return isSuccess? ResultUtil.success("新增备忘录成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
+        return isSuccess? ResultUtil.success(userMemo.getId()):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }
 
 

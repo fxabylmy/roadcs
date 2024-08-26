@@ -51,6 +51,11 @@ public class UserOpinion implements Serializable {
      * 回复内容
      */
     private String responseContent;
+
+    /**
+     * 状态
+     */
+    private Integer status;
     /**
      * 创建时间
      */
