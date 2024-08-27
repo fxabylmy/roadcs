@@ -61,7 +61,7 @@ public class AICHatServiceImpl extends ServiceImpl<ChatSessionMapper, ChatSessio
     private ChatUtil chatUtil;
 
 
-    @Override
+    /*@Override
     public Flux<ServerSentEvent<String>> streamNewAsk(String userId, String question) throws Exception {
         Generation gen = new Generation();
         List<String> responseData = new ArrayList<>();
@@ -100,6 +100,70 @@ public class AICHatServiceImpl extends ServiceImpl<ChatSessionMapper, ChatSessio
                             .build();
                     chatMessageMapper.insert(answerMessage);
                 })
+                .doOnError(e -> {
+                    if (e instanceof NoApiKeyException) {
+                        // 处理 NoApiKeyException
+                    } else if (e instanceof InputRequiredException) {
+                        // 处理 InputRequiredException
+                    } else if (e instanceof ApiException) {
+                        // 处理其他 ApiException
+                    } else {
+                        // 处理其他异常
+                    }
+                });
+    }*/
+
+
+    @Override
+    public Flux<ServerSentEvent<String>> streamNewAsk(String userId, String question) throws Exception {
+        Generation gen = new Generation();
+        List<String> responseData = new ArrayList<>();
+        List<Message> messages = new ArrayList<>();
+        messages.add(chatUtil.createMessage(Role.SYSTEM, "You are a helpful assistant."));
+        messages.add(chatUtil.createMessage(Role.USER, question));
+        GenerationParam param = chatUtil.createGenerationParam(messages);
+
+        // 调用生成接口，获取Flowable对象
+        Flowable<GenerationResult> result = gen.streamCall(param);
+
+
+        // 将Flowable转换成Flux<ServerSentEvent<String>>并进行处理
+        return Flux.from(result)
+                //手动设置延迟
+                //.delayElements(Duration.ofMillis(500))
+                .map(message -> {
+                    String output = message.getOutput().getChoices().get(0).getMessage().getContent();
+                    String replaceOutput = output.replace("\n", "\\x0A");
+                    responseData.add(output);
+                    return ServerSentEvent.<String>builder()
+                            .data(replaceOutput)
+                            .build();
+                })
+                .concatWith(Flux.defer(() -> {
+                    String combinedResult = String.join("", responseData);
+                    ChatSession chatSession = ChatSession.builder().userId(userId).name("为你的对话取个名字吧！").build();
+                    chatSessionMapper.insert(chatSession);
+
+
+                    ChatMessage ackMessage = ChatMessage.builder()
+                            .sessionId(chatSession.getId())
+                            .senderType(1)
+                            .message(question)
+                            .build();
+                    chatMessageMapper.insert(ackMessage);
+
+                    ChatMessage answerMessage = ChatMessage.builder()
+                            .sessionId(chatSession.getId())
+                            .senderType(2)
+                            .message(combinedResult)
+                            .build();
+                    chatMessageMapper.insert(answerMessage);
+
+                    // 将 chatSessionId 作为最终事件发送回前端
+                    return Flux.just(ServerSentEvent.<String>builder()
+                            .data("ChatSession ID: " + chatSession.getId())
+                            .build());
+                }))
                 .doOnError(e -> {
                     if (e instanceof NoApiKeyException) {
                         // 处理 NoApiKeyException

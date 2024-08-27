@@ -3,7 +3,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 127.0.0.1:8848 # 部署前请修改为对应的 Nacos 服务器地址
-  #      server-addr: 8.138.42.71:8848 # 测试环境Nacos地址
+        server-addr: 8.138.42.71:8848 # 测试环境Nacos地址
+  #      server-addr: 127.0.0.1:8848 # 部署前请修改为对应的 Nacos 服务器地址
   config:
     import: optional:nacos:humanity-service-dev.properties # 可选:nacos:对应nacos的配置dataId
