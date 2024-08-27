@@ -1,5 +1,6 @@
 package com.jingjin.thirdpartywebsiteservice.service.impl;
 
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jingjin.model.thirdPartyWebsite.dto.AddThirdPartyWebsiteDTO;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.jingjin.common.utils.urlUtil.UrlUtil.urlToBase64;
+import static com.jingjin.common.utils.urlUtil.UrlUtil.urlToThumbBase64;
 
 /**
  * 第三方网站服务实施
@@ -56,7 +58,7 @@ public class ThirdPartyWebsiteServiceImpl extends ServiceImpl<ThirdPartyWebsiteM
         List<ThirdPartyWebsite> list =list(wrapper);
         List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = new ArrayList<>();
         list.stream().forEach((ThirdPartyWebsite thirdPartyWebsite)->{
-            String base64Image = urlToBase64(thirdPartyWebsite.getLogoUrl());
+            String base64Image = urlToThumbBase64(thirdPartyWebsite.getLogoUrl());
             ThirdPartyWebsiteSimpleVO websiteSimpleVO =
                     ThirdPartyWebsiteConverter.INSTANCE.toWebsiteSimpleVO(thirdPartyWebsite);
             websiteSimpleVO.setLogoBase64(base64Image);
@@ -141,6 +143,24 @@ public class ThirdPartyWebsiteServiceImpl extends ServiceImpl<ThirdPartyWebsiteM
         List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = new ArrayList<>();
         list.stream().forEach((ThirdPartyWebsite thirdPartyWebsite)->{
             String base64Image = urlToBase64(thirdPartyWebsite.getLogoUrl());
+            ThirdPartyWebsiteSimpleVO websiteSimpleVO =
+                    ThirdPartyWebsiteConverter.INSTANCE.toWebsiteSimpleVO(thirdPartyWebsite);
+            websiteSimpleVO.setLogoBase64(base64Image);
+            websiteSimpleVOList.add(websiteSimpleVO);
+        });
+        return websiteSimpleVOList;
+    }
+
+    @Override
+    public List<ThirdPartyWebsiteSimpleVO> getByType(Integer type) {
+        LambdaQueryWrapper<ThirdPartyWebsite> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ThirdPartyWebsite::getStatus,"1")
+                .eq(ThirdPartyWebsite::getIsDelete,"0")
+                .eq(ThirdPartyWebsite::getType,type);
+        List<ThirdPartyWebsite> list =list(wrapper);
+        List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = new ArrayList<>();
+        list.stream().forEach((ThirdPartyWebsite thirdPartyWebsite)->{
+            String base64Image = urlToThumbBase64(thirdPartyWebsite.getLogoUrl());
             ThirdPartyWebsiteSimpleVO websiteSimpleVO =
                     ThirdPartyWebsiteConverter.INSTANCE.toWebsiteSimpleVO(thirdPartyWebsite);
             websiteSimpleVO.setLogoBase64(base64Image);

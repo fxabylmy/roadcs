@@ -1,5 +1,6 @@
 package com.jingjin.thirdpartywebsiteservice.service;
 
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jingjin.model.thirdPartyWebsite.dto.AddThirdPartyWebsiteDTO;
 import com.jingjin.model.thirdPartyWebsite.dto.UpdateThirdPartyWebsiteDTO;
@@ -21,4 +22,7 @@ public interface ThirdPartyWebsiteService extends IService<ThirdPartyWebsite> {
     Boolean updateThirdPartyWebsite(UpdateThirdPartyWebsiteDTO updateThirdPartyWebsiteDTO);
 
     List<ThirdPartyWebsiteSimpleVO> getByIds(List<Integer> ids);
+
+    @Cached(name="ThirdPartyWebsiteService.getByType", expire = 36000)
+    List<ThirdPartyWebsiteSimpleVO> getByType(Integer type);
 }
