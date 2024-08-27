@@ -6,6 +6,7 @@ import com.jingjin.common.result.ResultUtil;
 import com.jingjin.common.utils.UserContext;
 import com.jingjin.model.user.dto.user.UserLoginDTO;
 import com.jingjin.model.user.dto.user.*;
+import com.jingjin.model.user.po.User;
 import com.jingjin.model.user.vo.UserDetailVO;
 import com.jingjin.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -169,13 +170,23 @@ public class UserController {
                 .body(avatar);
         }
 
-    @Operation(summary = "用户更改背景")
-    @PutMapping("/background/upload")
+    @Operation(summary = "用户更改为自定义背景")
+    @PutMapping("/background/custom/upload")
     @Transactional
-    public BaseResult<String> uploadBackground(UploadBackgroundDTO uploadBackgroundDTO) throws Exception {
+    public BaseResult<String> uploadCustomBackground(UploadCustomBackgroundDTO uploadCustomBackgroundDTO) throws Exception {
         String userId = UserContext.getUserId();
-        Boolean isSuccess = userService.uploadBackground(uploadBackgroundDTO.getBackground(),userId);
-        return isSuccess?ResultUtil.success("背景上传成功"):ResultUtil.error(SYSTEM_ERROR);
+        String backgroundUrl = userService.uploadBackground(uploadCustomBackgroundDTO.getBackground(),userId);
+        return ResultUtil.success(backgroundUrl);
+    }
+
+    @Operation(summary = "用户更改为预设背景")
+    @PutMapping("/background/presuppose/upload")
+    @Transactional
+    public BaseResult<String> uploadPresupposeBackground(UploadPresupposeBackgroundDTO uploadPresupposeBackgroundDTO) throws Exception {
+        String userId = UserContext.getUserId();
+        String backgroundUrl = uploadPresupposeBackgroundDTO.getBackgroundUrl();
+        User user = User.builder().id(userId).backgroundUrl(backgroundUrl).build();
+        return ResultUtil.success(backgroundUrl);
     }
 
     @Operation(summary = "用户获取背景")

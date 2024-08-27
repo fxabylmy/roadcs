@@ -9,6 +9,7 @@ import com.jingjin.common.result.PageUtil;
 import com.jingjin.model.userInteraction.dto.OpinionResponseDTO;
 import com.jingjin.model.userInteraction.po.UserOpinion;
 import com.jingjin.model.userInteraction.vo.BackUserOpinionVO;
+import com.jingjin.model.userInteraction.vo.RespondedUserOpinionVO;
 import com.jingjin.model.userInteraction.vo.UserOpinionVO;
 import com.jingjin.serviceClient.service.user.UserFeignClient;
 import com.jingjin.userservice.mapper.UserOpinionMapper;
@@ -80,6 +81,30 @@ public class UserOpinionServiceImpl extends ServiceImpl<UserOpinionMapper, UserO
         return pageResponse;
     }
 
+    @Override
+    public PageResponse<RespondedUserOpinionVO> getPageResponded(int pageIndex, int pageSize) {
+        IPage<UserOpinion> pageParams = new Page<>(pageIndex, pageSize);
+        LambdaQueryWrapper<UserOpinion> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserOpinion::getIsDelete,"0")
+                .eq(UserOpinion::getStatus,2);
+        IPage<UserOpinion> resultPage =  page(pageParams,wrapper);
+        if(pageParams.getTotal()==0)
+            return PageUtil.isNull(new ArrayList<RespondedUserOpinionVO>());
+        List<UserOpinion> userOpinionList = resultPage.getRecords();
+        List<RespondedUserOpinionVO> respondedUserOpinionVOList = new ArrayList<>();
+        userOpinionList.stream().forEach((UserOpinion userOpinion)->{
+            RespondedUserOpinionVO respondedUserOpinionVO = UserOpinionConverter.INSTANCE.toRespondedUserOpinionVO(userOpinion);
+            if (StringUtils.hasText(userOpinion.getResponseId())){
+                String responseName = userService.getById(userOpinion.getResponseId()).getName();
+                respondedUserOpinionVO.setResponseName(responseName);
+            }
+            String userName = userService.getById(userOpinion.getUserId()).getName();
+            respondedUserOpinionVO.setUserName(userName);
+            respondedUserOpinionVOList.add(respondedUserOpinionVO);
+        });
+        PageResponse<RespondedUserOpinionVO> pageResponse = PageUtil.setPage(resultPage,respondedUserOpinionVOList);
+        return pageResponse;
+    }
 
 
 }

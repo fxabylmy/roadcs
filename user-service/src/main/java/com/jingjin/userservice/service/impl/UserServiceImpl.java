@@ -242,11 +242,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     }
 
     @Override
-    public Boolean uploadBackground(MultipartFile background, String userId) {
+    public String uploadBackground(MultipartFile background, String userId) {
         String backgroundUrl = uploadUtil.uploadImg(background);
         User user = User.builder().id(userId).backgroundUrl(backgroundUrl).build();
         Boolean isSuccess = updateById(user);
-        return isSuccess;
+        throwIf(!isSuccess,SYSTEM_ERROR);
+        return backgroundUrl;
     }
 
     @Override

@@ -1,16 +1,15 @@
 package com.jingjin.model.user.dto.user;
 
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
 @Data
-public class UploadBackgroundDTO implements Serializable {
+public class UploadPresupposeBackgroundDTO implements Serializable {
     /**
-     * 头像
+     * 预设背景图片Url
      */
-    private MultipartFile background;
+    private String backgroundUrl;
     /**
      * 串行版本uid
      */

@@ -32,7 +32,7 @@ public interface UserService extends IService<User> {
 
     Boolean passwordReWrite(UploadPasswordDTO uploadPasswordDTO);
 
-    Boolean uploadBackground(MultipartFile background, String userId);
+    String uploadBackground(MultipartFile background, String userId);
 
     byte[] getBackground(String userId) throws IOException;
 

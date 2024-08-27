@@ -2,6 +2,7 @@ package com.jingjin.userservice.util.converter;
 
 import com.jingjin.model.userInteraction.po.UserOpinion;
 import com.jingjin.model.userInteraction.vo.BackUserOpinionVO;
+import com.jingjin.model.userInteraction.vo.RespondedUserOpinionVO;
 import com.jingjin.model.userInteraction.vo.UserOpinionVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -18,4 +19,6 @@ public interface UserOpinionConverter {
     UserOpinionVO toUserOpinionVO(UserOpinion userOpinion);
 
     BackUserOpinionVO toBackUserOpinionVO(UserOpinion userOpinion);
+
+    RespondedUserOpinionVO toRespondedUserOpinionVO(UserOpinion userOpinion);
 }

@@ -12,6 +12,7 @@ import com.jingjin.model.userInteraction.dto.UpdateUserOpinionDTO;
 import com.jingjin.model.userInteraction.po.UserMemo;
 import com.jingjin.model.userInteraction.po.UserOpinion;
 import com.jingjin.model.userInteraction.vo.BackUserOpinionVO;
+import com.jingjin.model.userInteraction.vo.RespondedUserOpinionVO;
 import com.jingjin.model.userInteraction.vo.UserOpinionVO;
 import com.jingjin.userservice.service.UserOpinionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,7 +86,7 @@ public class UserOpinionController {
     }
 
     /**
-     * 删除用户意见
+     * 用户删除用户意见
      *
      * @param userOpinionId 用户意见id
      * @return {@link BaseResult}<{@link String}>
@@ -134,6 +135,24 @@ public class UserOpinionController {
         PageResponse<BackUserOpinionVO> backUserOpinionVOPageVO = userOpinionService.getPageBack(pageIndex,pageSize);
         return ResultUtil.success(backUserOpinionVOPageVO);
     }
+
+    /**
+     * 获取已响应用户意见列表
+     *
+     * @param pageIndex 页面索引
+     * @param pageSize  页面大小
+     * @return {@link BaseResult}<{@link PageResponse}<{@link BackUserOpinionVO}>>
+     */
+    @Operation(summary = "获取已响应用户意见列表")
+    @GetMapping ("/responded/get")
+    @Transactional
+    public BaseResult<PageResponse<RespondedUserOpinionVO>> getRespondedUserOpinion(@RequestParam(defaultValue = "1") int pageIndex,
+                                                                          @RequestParam(defaultValue = "10") int pageSize){
+        PageResponse<RespondedUserOpinionVO> respondedUserOpinionVOPageVO = userOpinionService.getPageResponded(pageIndex,pageSize);
+        return ResultUtil.success(respondedUserOpinionVOPageVO);
+    }
+
+
 
 
     /**
