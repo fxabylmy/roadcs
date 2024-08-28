@@ -271,6 +271,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     public UserDetailVO getUserDetail(String userId) {
         User user = getById(userId);
         UserDetailVO userDetailVO = UserConverter.INSTANCE.toUserDetailVO(user);
+        userDetailVO.setThumbAvatarUrl(user.getAvatarUrl()+"?x-oss-process=image/resize,m_fixed,h_80,w_80");
         return userDetailVO;
     }
 

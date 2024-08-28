@@ -47,7 +47,7 @@ public class UserMemoController {
     @Operation(summary = "新增用户备忘录")
     @PostMapping ("/add")
     @Transactional
-    public BaseResult<Integer> addUserMemo(AddUserMemoDTO addUserMemoDTO){
+    public BaseResult<Integer> addUserMemo(@RequestBody AddUserMemoDTO addUserMemoDTO){
         // 从token获取当前用户id
         String userId = UserContext.getUserId();
         UserMemo userMemo = UserMemo.builder()
@@ -80,7 +80,7 @@ public class UserMemoController {
     @Operation(summary = "修改用户备忘录")
     @PutMapping("/update")
     @Transactional
-    public BaseResult<String> updateUserMemo(UpdateUserMemoDTO updateUserMemoDTO){
+    public BaseResult<String> updateUserMemo(@RequestBody UpdateUserMemoDTO updateUserMemoDTO){
         UserMemo userMemo = userMemoService.getById(updateUserMemoDTO.getId());
         String userId = UserContext.getUserId();
         ThrowUtils.throwIf(!userId.equals(userMemo.getUserId()),ErrorCode.PRTMISSION_ERROR);

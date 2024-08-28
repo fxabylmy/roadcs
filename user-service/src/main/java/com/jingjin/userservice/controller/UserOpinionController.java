@@ -52,7 +52,7 @@ public class UserOpinionController {
     @Operation(summary = "新增用户意见")
     @PostMapping ("/add")
     @Transactional
-    public BaseResult<Integer> addUserOpinion(AddUserOpinionDTO addUserOpinionDTO){
+    public BaseResult<Integer> addUserOpinion(@RequestBody AddUserOpinionDTO addUserOpinionDTO){
         // 从token获取当前用户id
         String userId = UserContext.getUserId();
         UserOpinion userOpinion = UserOpinion.builder()
@@ -74,7 +74,7 @@ public class UserOpinionController {
     @Operation(summary = "用户修改用户意见")
     @PutMapping("/update")
     @Transactional
-    public BaseResult<String> updateUserOpinion(UpdateUserOpinionDTO updateUserOpinionDTO){
+    public BaseResult<String> updateUserOpinion(@RequestBody UpdateUserOpinionDTO updateUserOpinionDTO){
         UserOpinion userOpinion = userOpinionService.getById(updateUserOpinionDTO.getId());
         String userId = UserContext.getUserId();
         ThrowUtils.throwIf(!userId.equals(userOpinion.getUserId()),ErrorCode.PRTMISSION_ERROR);

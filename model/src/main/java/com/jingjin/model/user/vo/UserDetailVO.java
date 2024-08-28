@@ -16,12 +16,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class UserDetailVO implements Serializable {
 
+
     /**
-     * id
-     */
-    private String id;
-    /**
-     * 姓名
+     * 昵称
      */
     private String name;
 
@@ -32,14 +29,19 @@ public class UserDetailVO implements Serializable {
 
 
     /**
-     * 电话
+     * 性别
      */
-    private String phone;
+    private Integer sex;
 
     /**
-     * 微信
+     * 签名
      */
-    private String wechat;
+    private String signature;
+
+    /**
+     * 头像url
+     */
+    private String thumbAvatarUrl;
 
 
     /**

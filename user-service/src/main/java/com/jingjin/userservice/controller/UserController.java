@@ -214,7 +214,20 @@ public class UserController {
         return ResultUtil.success(userDetailVO);
     }
 
-
+    @Operation(summary = "修改用户信息")
+    @PutMapping("/user/update")
+    @Transactional
+    public BaseResult<String> updateUser(@RequestBody UpdateUserDTO updateUserDTO) throws IOException {
+        String userId = UserContext.getUserId();
+        User user = User.builder()
+                .id(userId)
+                .name(updateUserDTO.getName())
+                .sex(updateUserDTO.getSex())
+                .signature(updateUserDTO.getSignature())
+                .build();
+        Boolean isSuccess = userService.updateById(user);
+        return isSuccess? ResultUtil.success("修改用户信息成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
+    }
 
 
 

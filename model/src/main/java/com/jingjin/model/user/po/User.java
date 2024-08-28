@@ -28,7 +28,7 @@ public class User implements Serializable {
     private String id;
 
     /**
-     * 姓名
+     * 昵称
      */
     private String name;
 
@@ -43,14 +43,14 @@ public class User implements Serializable {
     private String password;
 
     /**
-     * 电话
+     * 性别
      */
-    private String phone;
+    private Integer sex;
 
     /**
-     * 微信
+     * 签名
      */
-    private String wechat;
+    private String signature;
 
     /**
      * 头像url
