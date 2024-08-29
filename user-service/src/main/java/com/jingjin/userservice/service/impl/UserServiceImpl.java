@@ -171,7 +171,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     }
 
     @Override
-    public byte[] getAvatar(String userId) throws IOException {
+    public byte[] getAvatar(String userId) throws IOException {//返回Bytes格式
         String avatarUrl = getById(userId).getAvatarUrl();
         throwIf(StringUtils.isEmpty(avatarUrl),SYSTEM_ERROR);
         URL url = new URL(avatarUrl);

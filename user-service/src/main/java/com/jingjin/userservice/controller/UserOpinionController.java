@@ -21,6 +21,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -79,8 +80,12 @@ public class UserOpinionController {
         String userId = UserContext.getUserId();
         ThrowUtils.throwIf(!userId.equals(userOpinion.getUserId()),ErrorCode.PRTMISSION_ERROR);
         ThrowUtils.throwIf(2==(userOpinion.getStatus()),ErrorCode.PRTMISSION_ERROR);
-        userOpinion.setTitle(updateUserOpinionDTO.getTitle());
-        userOpinion.setContent(updateUserOpinionDTO.getContent());
+        if(StringUtils.hasText(updateUserOpinionDTO.getTitle())){
+            userOpinion.setTitle(updateUserOpinionDTO.getTitle());
+        }
+        if(StringUtils.hasText(updateUserOpinionDTO.getContent())){
+            userOpinion.setContent(updateUserOpinionDTO.getContent());
+        }
         Boolean isSuccess = userOpinionService.updateById(userOpinion);
         return isSuccess? ResultUtil.success("修改意见成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }

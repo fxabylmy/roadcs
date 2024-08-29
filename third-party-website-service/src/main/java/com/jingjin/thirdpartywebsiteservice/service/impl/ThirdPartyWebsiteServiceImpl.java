@@ -101,6 +101,7 @@ public class ThirdPartyWebsiteServiceImpl extends ServiceImpl<ThirdPartyWebsiteM
                 .importanceLevel(addThirdPartyWebsiteDTO.getImportanceLevel())
                 .subtitle(addThirdPartyWebsiteDTO.getSubtitle())
                 .recommendation(addThirdPartyWebsiteDTO.getRecommendation())
+                .status(1)
                 .build();
         Boolean isSuccess = save(thirdPartyWebsite);
         return isSuccess;
@@ -158,6 +159,20 @@ public class ThirdPartyWebsiteServiceImpl extends ServiceImpl<ThirdPartyWebsiteM
                 .eq(ThirdPartyWebsite::getIsDelete,"0")
                 .eq(ThirdPartyWebsite::getType,type);
         List<ThirdPartyWebsite> list =list(wrapper);
+        List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = new ArrayList<>();
+        list.stream().forEach((ThirdPartyWebsite thirdPartyWebsite)->{
+            String base64Image = urlToThumbBase64(thirdPartyWebsite.getLogoUrl());
+            ThirdPartyWebsiteSimpleVO websiteSimpleVO =
+                    ThirdPartyWebsiteConverter.INSTANCE.toWebsiteSimpleVO(thirdPartyWebsite);
+            websiteSimpleVO.setLogoBase64(base64Image);
+            websiteSimpleVOList.add(websiteSimpleVO);
+        });
+        return websiteSimpleVOList;
+    }
+
+    @Override
+    public List<ThirdPartyWebsiteSimpleVO> search(String name) {
+        List<ThirdPartyWebsite> list = thirdPartyWebsiteMapper.search(name);
         List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = new ArrayList<>();
         list.stream().forEach((ThirdPartyWebsite thirdPartyWebsite)->{
             String base64Image = urlToThumbBase64(thirdPartyWebsite.getLogoUrl());

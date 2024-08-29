@@ -17,6 +17,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -84,8 +85,12 @@ public class UserMemoController {
         UserMemo userMemo = userMemoService.getById(updateUserMemoDTO.getId());
         String userId = UserContext.getUserId();
         ThrowUtils.throwIf(!userId.equals(userMemo.getUserId()),ErrorCode.PRTMISSION_ERROR);
-        userMemo.setTitle(updateUserMemoDTO.getTitle());
-        userMemo.setContent(updateUserMemoDTO.getContent());
+        if (StringUtils.hasText(updateUserMemoDTO.getTitle())){
+            userMemo.setTitle(updateUserMemoDTO.getTitle());
+        }
+        if(StringUtils.hasText(updateUserMemoDTO.getContent())){
+            userMemo.setContent(updateUserMemoDTO.getContent());
+        }
         Boolean isSuccess = userMemoService.updateById(userMemo);
         return isSuccess? ResultUtil.success("修改备忘录成功"):ResultUtil.error(ErrorCode.SYSTEM_ERROR);
     }

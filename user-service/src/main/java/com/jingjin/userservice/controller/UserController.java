@@ -1,5 +1,6 @@
 package com.jingjin.userservice.controller;
 
+import com.jingjin.common.exception.ThrowUtils;
 import com.jingjin.common.result.BaseResult;
 import com.jingjin.common.result.ErrorCode;
 import com.jingjin.common.result.ResultUtil;
@@ -157,17 +158,12 @@ public class UserController {
     @Operation(summary = "用户获取头像")
     @GetMapping("/avatar/get")
     @Transactional
-    public ResponseEntity<ByteArrayResource> getAvatar() throws IOException {
+    public BaseResult<String> getAvatar() throws IOException {
         // 从token获取userId
         String userId = UserContext.getUserId();
-        byte[] imageBytes = userService.getAvatar(userId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        ByteArrayResource avatar = new ByteArrayResource(imageBytes);
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(imageBytes.length)
-                .body(avatar);
+        String avatarUrl = userService.getById(userId).getAvatarUrl();
+        ThrowUtils.throwIf(avatarUrl==null,ErrorCode.GONE_ERROR);
+        return ResultUtil.success(avatarUrl);
         }
 
     @Operation(summary = "用户更改为自定义背景")
@@ -192,17 +188,12 @@ public class UserController {
     @Operation(summary = "用户获取背景")
     @GetMapping("/background/get")
     @Transactional
-    public ResponseEntity<ByteArrayResource> getBackground() throws IOException {
+    public BaseResult<String> getBackground() throws IOException {
         // 从token获取userId
         String userId = UserContext.getUserId();
-        byte[] imageBytes = userService.getBackground(userId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        ByteArrayResource background = new ByteArrayResource(imageBytes);
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(imageBytes.length)
-                .body(background);
+        String backgroundUrl = userService.getById(userId).getBackgroundUrl();
+        ThrowUtils.throwIf(backgroundUrl==null,ErrorCode.GONE_ERROR);
+        return ResultUtil.success(backgroundUrl);
     }
 
     @Operation(summary = "获取用户详情")

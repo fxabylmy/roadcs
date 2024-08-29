@@ -58,7 +58,7 @@ public class ThirdPartyWebsiteController {
     }
 
     /**
-     * 按类型获取第三方网站详细信息
+     * 按类型获取第三方网站列表
      *
      * @param Type 类型
      * @return {@link BaseResult}<{@link List}<{@link ThirdPartyWebsiteSimpleVO}>>
@@ -68,6 +68,20 @@ public class ThirdPartyWebsiteController {
     @Transactional
     public BaseResult<List<ThirdPartyWebsiteSimpleVO>> getThirdPartyWebsiteDetailByType(@PathVariable("type") Integer Type){
         List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = thirdPartyWebsiteService.getByType(Type);
+        return ResultUtil.success(websiteSimpleVOList);
+    }
+
+    /**
+     * 查询第三方网站列表
+     *
+     * @param name 姓名
+     * @return {@link BaseResult}<{@link List}<{@link ThirdPartyWebsiteSimpleVO}>>
+     */
+    @Operation(summary = "查询第三方网站列表")
+    @GetMapping("/search")
+    @Transactional
+    public BaseResult<List<ThirdPartyWebsiteSimpleVO>> searchThirdPartyWebsite(String name){
+        List<ThirdPartyWebsiteSimpleVO> websiteSimpleVOList = thirdPartyWebsiteService.search(name);
         return ResultUtil.success(websiteSimpleVOList);
     }
 

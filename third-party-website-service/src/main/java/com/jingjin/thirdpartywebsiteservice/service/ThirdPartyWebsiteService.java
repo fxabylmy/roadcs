@@ -25,4 +25,6 @@ public interface ThirdPartyWebsiteService extends IService<ThirdPartyWebsite> {
 
     @Cached(name="ThirdPartyWebsiteService.getByType", expire = 36000)
     List<ThirdPartyWebsiteSimpleVO> getByType(Integer type);
+
+    List<ThirdPartyWebsiteSimpleVO> search(String name);
 }
